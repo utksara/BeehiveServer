@@ -10,7 +10,7 @@ var app = express();
 var credentials = {key: privateKey, cert: certificate};
 
 var httpsServer = https.createServer(credentials, app);
-httpsServer.listen(8082);
+// httpsServer.listen(8082);
 
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({
