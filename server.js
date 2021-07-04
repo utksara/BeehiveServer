@@ -14,6 +14,7 @@ httpsServer.listen(8082);
 
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({
+    port: 8082,
     server: httpsServer
   });
 
