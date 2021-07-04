@@ -1,11 +1,24 @@
-const websocket = require("ws");
+
+const https = require('https');
 const fs = require("fs");
 
-const wss  = new websocket.Server({port : 8082});
+var privateKey  = fs.readFileSync('certs/key.pem', 'utf8');
+var certificate = fs.readFileSync('certs/cert.pem', 'utf8');
+
+var express = require('express');
+var app = express();
+var credentials = {key: privateKey, cert: certificate};
+
+var httpsServer = https.createServer(credentials, app);
+httpsServer.listen(8082);
+
+var WebSocketServer = require('ws').Server;
+var wss = new WebSocketServer({
+    server: httpsServer
+  });
+
 
 var exec = require('child_process').exec, child;
-
-
 child = exec(`make`,
 function (error, stdout, stderr) {
     if (error !== null) {
