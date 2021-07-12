@@ -20,7 +20,7 @@ var wss = new WebSocketServer({
 
 
 var exec = require('child_process').exec, child;
-child = exec(`make`,
+child = exec(`make process`,
 function (error, stdout, stderr) {
     if (error !== null) {
         console.log('exec error: ' + error);
