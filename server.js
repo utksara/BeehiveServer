@@ -1,34 +1,52 @@
 
-const https = require('https');
 const fs = require("fs");
+const exec = require('child_process').exec;
 
 var privateKey  = fs.readFileSync('certs/key.pem', 'utf8');
 var certificate = fs.readFileSync('certs/cert.pem', 'utf8');
 
-var express = require('express');
-var app = express();
-var credentials = {key: privateKey, cert: certificate};
-
-var httpsServer = https.createServer(credentials, app);
-// httpsServer.listen(8082);
+// var credentials = {key: privateKey, cert: certificate};
 
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({
-    port: 8082,
-    server: httpsServer
+    port: 8082
   });
 
+// child = exec(`make main`,
+// function (error, stdout, stderr) {
+//     if (error !== null) {
+//         console.log('exec error: ' + error);
+//     }
+//     console.log(stdout);
+// });
 
-var exec = require('child_process').exec, child;
-child = exec(`make process`,
-function (error, stdout, stderr) {
-    if (error !== null) {
-        console.log('exec error: ' + error);
-    }
-    console.log(stdout);
-});
+let update  = function (ws) {
+
+    console.log("updating");
+    const {run} = require('./module_tests.js')
+    let array_of_items, jsonobj;
+
+    let ran = (async ()=>{return await run})
+    ran().then(array_of_items => {
+        array_of_items.forEach(element => {
+            (async ()=>{ 
+                return await (element.topology.generate)(element.topology)
+            })().then(value => {
+                jsonobj = {
+                    "id" : "line" + element.ID,
+                    "svg" : value,
+                    "width" : element.topology.width
+                }
+                ws.send(JSON.stringify(jsonobj));
+            }) 
+        }); 
+    });
+}
 
 wss.on("connection" , ws => {
+
+    update(ws);
+    
     console.log("New client connected");
      
     ws.on("close", () => {
@@ -39,19 +57,19 @@ wss.on("connection" , ws => {
 
         var msg = e.data;
         
-        fs.writeFile('input_data.json', msg, (err) => {
+        fs.writeFile('inputoutput/input_data.json', msg, (err) => {
             if (err) throw err;
             console.log('Data written to file');
         });
             
-        child = exec(`./main`,
+        child = exec(`./cpp_bins/main`,
         function (error, stdout, stderr) {
             if (error !== null) {
                 console.log('exec error: ' + error);
             }
             console.log(stdout);
             try {
-                const output_data = JSON.parse(fs.readFileSync('output_data.json', 'utf8'));
+                const output_data = JSON.parse(fs.readFileSync('inputoutput/output_data.json', 'utf8'));
                 ws.send(output_data.data);
               } catch (err) {
                 console.error(err)

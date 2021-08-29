@@ -1,4 +1,3 @@
-#include "math.h"
 #include <Eigen/Dense>
 #include "processes.h"
 
@@ -6,39 +5,7 @@ using namespace std;
 
 Curve contours;
 
-
-Point operator + (Point &p1, Point &p2){
-    return {p1[0] + p2[0], p1[1] + p2[1]};
-}
-
-// Copies Curve c1 to Curve c2
-void Copy_curve(Curve c1, Curve& c2){
-    c2.clear();
-    for (auto p : c1){
-        c2.push_back(p);
-    }
-}
-
-Point _get_point_coordinates(string word){
-    stringstream read_word(word);
-    Point p;
-    int n, i = 0;
-    while (read_word.good()) {
-        string substr;
-        getline(read_word, substr, ',');
-        stringstream s(substr);
-        s >> n;
-        p[i] = n;
-        i++; 
-    }
-    return p;
-}
-
-float _distance(Point p1, Point p2){
-    return sqrt((p1[0] - p2[0], 2) + pow(p1[1] - p2[1], 2));
-}
-
-
+// calculate normal vetor at a given point in a curve
 Point _normal_vector(Curve c, Point p, float mag){
     auto it = find (c.begin(), c.end(), p);
     int index = it - c.begin();
@@ -56,6 +23,13 @@ Point _normal_vector(Curve c, Point p, float mag){
         cout<< "\nalert! :point not in curve ";
         return p;
     }
+}
+
+void draw_circle(json process_request){
+    string values = process_request["values"].asString(); 
+    stringstream ss(values);
+    string word;
+    
 }
 
 void draw_contour(json process_request){
@@ -84,7 +58,7 @@ void draw_contour(json process_request){
         string output_data = "{\"data\" : \"";
         output_data.append(coords);
         output_data.append("\"}");
-        ofstream output_file("output_data.json", std::ifstream::binary);
+        ofstream output_file("inputoutput/output_data.json", std::ifstream::binary);
         output_file << output_data;
         output_file.close();
     }
@@ -112,20 +86,8 @@ void update_displacement_field(json process_request){
         Point p = _get_point_coordinates(word);
         boundary.push_back(p);
     }
+
     using namespace Eigen;
-
-    // int N = 50;
-    // MatrixXf Op = MatrixXf::Identity(N,N);
-    // Matrix <float, Dynamic, 1> x = MatrixXf::Identity(N,1);
-    // Matrix <float, Dynamic, 1> v = MatrixXf::Ones(N,1);
-
-    // for (int i = 1; i < N; i ++){
-    //     for (int j = 0; j < i; j ++){
-    //         Op(i,j) = -1/pow(2,i-j); 
-    //     }
-    // }
-    // x = Op.inverse() * v;
-
     Curve new_boundary = boundary, current_boundary; 
     Point new_p;
     string coords;
@@ -149,8 +111,44 @@ void update_displacement_field(json process_request){
     string output_data = "{\"data\" : \"";
     output_data.append(coords);
     output_data.append("\"}");
-    ofstream output_file("output_data.json", std::ifstream::binary);
+    ofstream output_file("inputoutput/output_data.json", std::ifstream::binary);
     output_file << output_data;
     output_file.close();
     
+}
+// template <class T>
+void draw_line(map<string, string> data) {
+    Point center  = parse_point_2D(data.at("center"));
+    float angle = parse_float_number(data.at("angle"));
+    float length = parse_float_number(data.at("length"));
+    string svg_path = "M ";
+
+    stringstream ss;
+
+    float segment = -length/2;
+    Point x = {segment*cos(angle), segment*sin(angle)};
+    Point new_point =  center + x;  
+    ss << new_point[0];
+    svg_path.append(ss.str());
+    svg_path.append(",");
+    ss.str("");
+    ss << new_point[1];
+    svg_path.append(ss.str());
+    svg_path.append(" ");
+    ss.str("");
+
+    segment = length/2;
+    x = {segment*cos(angle), segment*sin(angle)};
+    new_point =  center + x;  
+    ss << new_point[0];
+    svg_path.append(ss.str());
+    svg_path.append(",");
+    ss.str("");
+    ss << new_point[1];
+    svg_path.append(ss.str());
+    svg_path.append(" ");
+    ss.str("");
+
+    svg_path.append("Z");
+    cout << svg_path;
 }

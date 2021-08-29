@@ -2,4 +2,7 @@ node_modules/
 *.o
 .vscode/
 main
+cpp_bins/
+data.
 calculations
+CellMechanicsReportUtk.docx

@@ -1,0 +1,11 @@
+jstests.js
+node_modules/
+*.cpp
+*.html
+*.json
+cpp_modules/
+tests/
+cache/
+certs/
+lib/
+inputoutput/
