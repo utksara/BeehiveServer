@@ -36,8 +36,9 @@ basictest:basicbuild
 .PHONY : maintests
 maintests: main
 	# ./cpp_bins/main float "1011.1"
-	./cpp_bins/main line center "500,500" angle "0.52" length "400" 
+	./cpp_bins/main line center "500,500" angle "0.52" length "400"  
 
 .PHONY : maintestsonly
 maintestsonly:
 	./cpp_bins/main line center "500,500" angle "0.52" length "400" 
+	./cpp_bins/main curve center "500,500" movement "100, 100, 100, 100"

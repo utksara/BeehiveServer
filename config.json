@@ -1,0 +1,6 @@
+{
+    "DEBUG" : true,
+    "DEBUGPROCESSES" : false,
+    "DEBUGSYSTEMS" : false,
+    "DEBUGPARAMS" : false 
+}

@@ -6,7 +6,6 @@ function _render(sys) {
 const xmlns = "http://www.w3.org/2000/svg";
 
 function init_setup(){
-    // console.log(startime_time);
     document.getElementById("canvas").setAttribute('height',600);
     document.getElementById("canvas").setAttribute('width',1050);
     // Array_of_shapes.forEach ( (sys) =>_render(sys))

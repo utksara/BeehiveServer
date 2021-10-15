@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "startsim" : "forever -w server.js",
+    "onetest" : "mocha -g",
     "test": "mocha --reporter spec"
   },
   "author": "utk",
