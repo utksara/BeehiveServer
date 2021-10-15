@@ -68,11 +68,9 @@ let main = () => {
     CONNECTADVANCED (S1) ("P_1") (S3)
     CONNECTADVANCED (S2) ("P0") (S3)
     CONNECT (Sparent) (PATTERN(S1, {'S1' : 'S2', 'S2' : 'S3'}, N))
-    // bfsTraverse(Sparent, arg =>{
-    //     console.log(arg.ID)
-    //     // console.log(arg.VISUALIZE[0])
-    //     // console.log("------")
-    // })
+    bfsTraverse(Sparent, arg =>{
+        console.log(arg.ID)
+    })
 }
 
 

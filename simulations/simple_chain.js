@@ -2,6 +2,9 @@ const {shapes, calc, SYSTEM, CONNECT, CHAIN, SHELF, MESH, CONNECTIONS, copySyste
 
 shapes._reset();
 
+
+let Sparent = SYSTEM();
+
 let S1 = SYSTEM ({
     NAME : "S1",
     VISUALIZE : [
@@ -19,8 +22,6 @@ let S1 = SYSTEM ({
     ],
 });
 
-let Sparent = SYSTEM();
-
 let main = () => {
     //-----Example 1-----------
         
@@ -32,11 +33,10 @@ let main = () => {
         }
         return Pressurearray;
     }
-
     CONNECT (Sparent) (CHAIN (S1, N));
-    bfsTraverse(Sparent, arg =>{
-        console.log(arg.VISUALIZE[0])
-    })
+    // bfsTraverse(Sparent, arg =>{
+    //     console.log(arg.VISUALIZE[0])
+    // })
 }
 
 

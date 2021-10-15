@@ -47,7 +47,6 @@ let S3 = SYSTEM ({
             Pressure = Pressure + delta * delPressure
             delPressure = delPressure + delta * omega * (-Pressure)
             Qty = 200  + Pressure
-            console.log(Qty)
         }})
     ],
 });
@@ -69,11 +68,13 @@ let main = () => {
 
     CONNECT (S1) (S2, S3)
     CONNECT (S2) (S3)
+
+    console.log("pusheen ", PATTERN(S1, {'S2' : 'S3', "S1" : "S2"}, N))
     CONNECT (Sparent) (PATTERN(S1, {'S2' : 'S3', "S1" : "S2"}, N))
     // bfsTraverse(Sparent, arg =>{
     //     console.log(arg.ID)
-    //     console.log(arg.VISUALIZE[0])
-    //     console.log("------")
+    //     // console.log(arg.VISUALIZE[0])
+    //     // console.log("------")
     // })
 }
 

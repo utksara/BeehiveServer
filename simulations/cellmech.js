@@ -37,9 +37,10 @@ let main = () => {
     let N = 2;
     let M = 50;
 
-    BICONNECT (S1) (copySystem(S1))
-    console.log(S1)
+    CONNECT (S1) (copySystem(S1))
+    CONNECT (S1) (copySystem(S1))
     CONNECT (Sparent) (S1)
+    console.log(S1)
 
     // CONNECT (Sparent) (CHAIN(SHELF(S1, N),M))
     // CONNECT (Sparent) (SHELF (CHAIN(S1, M),N))
