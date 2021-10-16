@@ -10,7 +10,11 @@ let Sparent = SYSTEM();
 
 let p1 = (async function (S){with (S){
     T = T - omega*dx*T
-    console.log(T)
+}})
+
+let b2s = (async function (S){with (S){
+    cellshape = shapes.array_to_movement(cellboundary)
+    console.log(cellshape)
 }})
 
 let S1 = SYSTEM ({
@@ -18,35 +22,32 @@ let S1 = SYSTEM ({
     T : 200, 
     dx : Dx,
     omega : Omega,
+    cellboundary : [100, 100, 140, 100, 200], 
+    cellshape : "100, 100, 100, 200,",
     REQUIRE : ["T"],    
     VISUALIZE :[
         {
             REPRESENTS : "T",
-            TOPOLOGY : shapes.point,
+            TOPOLOGY : shapes.curve,
+            POSITION : [500, 350],
+            MOVEMENT : "cellshape",
             maxval : 200,
             minval : -200,
         }
     ],
     PROCESS : [
-        p1
+        p1,
+        b2s,
     ],
 });
 
 let main = () => {
     //-----Example 1-----------
-    let N = 2;
-    let M = 50;
-
-    CONNECT (S1) (copySystem(S1))
-    CONNECT (S1) (copySystem(S1))
-    CONNECT (Sparent) (S1)
-    console.log(S1)
-
-    // CONNECT (Sparent) (CHAIN(SHELF(S1, N),M))
-    // CONNECT (Sparent) (SHELF (CHAIN(S1, M),N))
-    // bfsTraverse(Sparent, arg =>{
-    //     console.log(arg.ID)
-    // })
+    let N = 10; 
+    CONNECT (Sparent) (CHAIN(S1, N))
+    bfsTraverse(Sparent, arg =>{
+        console.log(arg.cellshape)
+    })
 }
 
 
