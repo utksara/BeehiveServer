@@ -1,4 +1,4 @@
-const {shapes, calc, SYSTEM, CONNECT, CHAIN, SHELF, MESH, CONNECTIONS, copySystem, bfsTraverse }  = require('./../dev.js');
+const {shapes, calc, SYSTEM, SIMPLECONNECT, CHAIN, STACK, MESH, CONNECTIONS, COPY, bfsTraverse }  = require('./../dev.js');
 
 shapes._reset();
 
@@ -10,7 +10,7 @@ let S1 = SYSTEM ({
     VISUALIZE : [
         {
             REPRESENTS : "Pressure",
-            TOPOLOGY : shapes.line
+            GEOMETRY : shapes.line
         }
     ],
     Pressure : 200,
@@ -33,7 +33,7 @@ let main = () => {
         }
         return Pressurearray;
     }
-    CONNECT (Sparent) (CHAIN (S1, N));
+    SIMPLECONNECT (Sparent) (CHAIN (S1, N));
     // bfsTraverse(Sparent, arg =>{
     //     console.log(arg.VISUALIZE[0])
     // })

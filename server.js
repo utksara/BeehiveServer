@@ -20,7 +20,7 @@ let visualize = async (jsonobj, ws) => {
     //     elementouter.VISUALIZE.forEach(element => {
     //         (async ()=>{
     //             element._param = element._param?element._param:{};
-    //             return await element.TOPOLOGY(element._param).generate()
+    //             return await element.GEOMETRY(element._param).generate()
     //         })().then(value => {
     //             jsonobj = {
     //                     "id" : "shape" + elementouter.ID,

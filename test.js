@@ -1,19 +1,19 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const {shapes, SYSTEM, CONNECT, CHAIN, MESH, CONNECTIONS, copySystem, PATTERN, bfsTraverse}  = require('./dev.js');
+const {shapes, SYSTEM, SIMPLECONNECT, CHAIN, MESH, CONNECTIONS, COPY, PATTERN, bfsTraverse}  = require('./dev.js');
 const {_push_sys, _search_by, _run_system} = require('./lib/beehive.js')
 const {register} = require('./lib/sendingData.js');
 const {dfsTraverse} = require('./lib/beehiveUtils')
 
 describe('Beehive functions', function() {
-    describe('copySystem', function() {
+    describe('copy system', function() {
         it('should create clone of a system', function() {
             let s1 = SYSTEM({
                 "property" : 1,
                 NAME : "s1",
             });
-            let s2 = copySystem(s1)
+            let s2 = COPY(s1)
             assert(s2.property === s1.property, true);
             s2.NAME = "s2"
             assert(s2.NAME === "s2", true);
@@ -40,10 +40,10 @@ describe('Beehive functions', function() {
             let s1 = SYSTEM({NAME:"s1"});
             let s2 = SYSTEM({NAME:"s2"});
             let s3 = SYSTEM({NAME:"s3"});
-            CONNECT (s1) (s2, s3);    
-            CONNECT (s0) (CHAIN(s1, 3));
-            // CONNECT (s2, s3) (s4)
-            // CONNECT (s4) (s5, s6)
+            SIMPLECONNECT (s1) (s2, s3);    
+            SIMPLECONNECT (s0) (CHAIN(s1, 3));
+            // SIMPLECONNECT (s2, s3) (s4)
+            // SIMPLECONNECT (s4) (s5, s6)
 
             let systemOrder = dfsTraverse(s0, "NAME")
             let orderShouldBe = ["s0", "s1", "s2", "s3", "s1", "s2", "s3", "s1", "s2", "s3"];
@@ -65,10 +65,10 @@ describe('Beehive functions', function() {
             let t6 = SYSTEM({NAME:"t6"});
 
             const systemOrder = await CONNECTIONS(()=>{
-                CONNECT (t0) (t1)
-                CONNECT (t1) (t2, t3, t4)
-                CONNECT (t4) (t5)
-                CONNECT (t4) (t3)
+                SIMPLECONNECT (t0) (t1)
+                SIMPLECONNECT (t1) (t2, t3, t4)
+                SIMPLECONNECT (t4) (t5)
+                SIMPLECONNECT (t4) (t3)
 
             }, t0);
             const systemIDOrder = _.map(systemOrder, function (x) {
@@ -88,7 +88,7 @@ describe('Beehive functions', function() {
             let s2 = SYSTEM({NAME:"s2"});
             let s3 = SYSTEM({NAME:"s3"});
 
-            CONNECT (s0) (s1, s2);
+            SIMPLECONNECT (s0) (s1, s2);
             _push_sys ('forward')(s3) (s0);
 
             let traversal = dfsTraverse(s0, "NAME");
@@ -113,7 +113,7 @@ describe('Beehive functions', function() {
             let s3 = SYSTEM({NAME:"s3"});
             let s4 = SYSTEM({NAME:"s4"})
 
-            CONNECT (s0) (s1, s2);
+            SIMPLECONNECT (s0) (s1, s2);
 
             let endpoints = _.reduce(s0.endpoints, function (result, value) {
                 result.push(value.NAME)
@@ -176,11 +176,11 @@ describe('Beehive functions', function() {
                 VISUALIZE : [
                     {
                         REPRESENTS : "Quantity1",
-                        TOPOLOGY : shapes.point
+                        GEOMETRY : shapes.point
                     },
                     {
                         REPRESENTS : "Quantity2",
-                        TOPOLOGY : shapes.point
+                        GEOMETRY : shapes.point
                     }
                 ],
             });
@@ -215,7 +215,7 @@ describe('Beehive functions', function() {
                 VISUALIZE : [
                     {
                         REPRESENTS : "Pressure",
-                        TOPOLOGY : shapes.point
+                        GEOMETRY : shapes.point
                     }
                 ],
                 Pressure : 200,
@@ -240,8 +240,8 @@ describe('Beehive functions', function() {
                 return Pressurearray;
             }
             // let Schained = CHAIN(control_vol, N);
-            // CONNECT (Sparent) (SHELF(Schained, N, { Pressure : PressureGen(Nshelf) }));
-            CONNECT (Sparent) (MESH(control_vol, N, N))
+            // SIMPLECONNECT (Sparent) (STACK(Schained, N, { Pressure : PressureGen(Nshelf) }));
+            SIMPLECONNECT (Sparent) (MESH(control_vol, N, N))
             await _run_system(Sparent);
             assert(1 === 1, true);
 
@@ -273,12 +273,12 @@ describe('Beehive functions', function() {
                 NAME : "S5",
             });
 
-            CONNECT (Sparent) (S1)
-            CONNECT (S1) (S2, S3)
-            CONNECT (S2) (S3)
-            CONNECT (S3) (S5)
-            CONNECT (S2) (S4)
-            CONNECT (S4) (S5)
+            SIMPLECONNECT (Sparent) (S1)
+            SIMPLECONNECT (S1) (S2, S3)
+            SIMPLECONNECT (S2) (S3)
+            SIMPLECONNECT (S3) (S5)
+            SIMPLECONNECT (S2) (S4)
+            SIMPLECONNECT (S4) (S5)
 
             let result = _search_by(Sparent, 'NAME', ['S3'])
             console.log(result)
@@ -308,9 +308,9 @@ describe('Beehive functions', function() {
                 NAME : "S4",
             });
 
-            CONNECT (S1) (S2, S3)
-            CONNECT (S2) (S3, S4)
-            CONNECT (S3) (S4)
+            SIMPLECONNECT (S1) (S2, S3)
+            SIMPLECONNECT (S2) (S3, S4)
+            SIMPLECONNECT (S3) (S4)
             let SS = PATTERN(S1, {'S1' : 'S4'}, 3)
             bfsTraverse(SS)
             assert(1 === 1, true);
@@ -334,8 +334,8 @@ describe('Beehive functions', function() {
                 NAME : "S3",
             });
 
-            CONNECT (S1) (S2, S3)
-            CONNECT (S2) (S3)
+            SIMPLECONNECT (S1) (S2, S3)
+            SIMPLECONNECT (S2) (S3)
             let SS = PATTERN(S1, {'S2' : 'S3', 'S1' : 'S2'}, 20)
             bfsTraverse(SS)
             assert(1 === 1, true);

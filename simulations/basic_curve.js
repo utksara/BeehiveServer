@@ -31,7 +31,7 @@ let S1 = SYSTEM ({
     dx : Dx,
     omega : 10,
     center: [600, 350],
-    cellboundary : [100, 100, 100], 
+    cellboundary : [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,], 
     REQUIRE : ["T", "R",],    
     VISUALIZE :[
         {
@@ -41,7 +41,7 @@ let S1 = SYSTEM ({
             MOVEMENT : "cellboundary",
             maxval : 200,
             minval : -200,
-        },
+        }
     ],
     PROCESS : [
         calculate_traction, 
@@ -49,17 +49,13 @@ let S1 = SYSTEM ({
     ],
 });
 
-// let ScellBoundary = SYSTEM({
-//     NAME : "boundary"
-// });
-
 let main = () => {
     //-----Example 1-----------
-    let N = 4, M  = 4;
-    SIMPLECONNECT (Sparent) (STACK (CHAIN (S1, N), M))
-    bfsTraverse(Sparent, arg =>{
-        console.log(arg.ID, "-->", arg.TO)
-    })
+    let N = 10; 
+    SIMPLECONNECT (Sparent) (CHAIN(S1, N))
+    // bfsTraverse(Sparent, arg =>{
+    //     console.log(arg.cellshape)
+    // })
 }
 
 

@@ -1,4 +1,4 @@
-const {shapes, calc, SYSTEM, CONNECT, CONNECTADVANCED, CHAIN, SHELF, MESH, CONNECTIONS, copySystem, bfsTraverse }  = require('./../dev.js');
+const {shapes, calc, SYSTEM, SIMPLECONNECT, CONNECT, CHAIN, STACK, MESH, CONNECTIONS, COPY, bfsTraverse }  = require('./../dev.js');
 
 shapes._reset();
 
@@ -6,15 +6,25 @@ let control_vol = SYSTEM ({
     NAME : "control_vol",
     VISUALIZE : [
         {
-            REPRESENTS : "Pressure",
-            TOPOLOGY : shapes.point
+            REPRESENTS : "divP",
+            GEOMETRY : shapes.point,
+            maxval : 400,
+            minval : 0
         }
     ],
-    Pressure : 200,
-    REQUIRE : ["Pressure"],    
+    Px : 200,
+    Py : 100,
+    dx : 0.1,
+    dy : 0.1,
+    divP : 0,
+    REQUIRE : ["Px", "Py"],    
     PROCESS : [
         (async function (S){with (S){
-            Pressure = 0.95 * Pressure
+            dPx = 0.08 * (Px + Py);
+            dPy = 0.1 * (Px + Py);
+            Px = Px - dPx;
+            Py = Py - dPy;
+            divP = dPx/dx + dPy/dy;
         }})
     ],
 });
@@ -22,22 +32,11 @@ let control_vol = SYSTEM ({
 let Sparent = SYSTEM();
 
 let main = () => {
-    //-----Example 1-----------
-    let Nchain = 100;
-    let Nshelf = 10;
+    let N = 15;
 
-    let N = 50;
-    let PressureGen =(N)=> {
-        Pressurearray = []
-        for (let n = 0; n<N; n++){
-            Pressurearray.push(200 - 8*n);
-        }
-        return Pressurearray;
-    }
-
-    CONNECT (Sparent) (MESH(control_vol, N, N));
+    SIMPLECONNECT (Sparent) (MESH(control_vol, N, N, xflow = ["Px"], yflow = ["Py"]));
     bfsTraverse(Sparent, arg =>{
-        console.log(arg.VISUALIZE[0])
+        console.log(arg.ID)
     })
 }
 

@@ -1,4 +1,4 @@
-const {shapes, calc, SYSTEM, CONNECT, CHAIN, SHELF, MESH, CONNECTIONS, copySystem, bfsTraverse }  = require('./../dev.js');
+const {shapes, calc, SYSTEM, SIMPLECONNECT, CHAIN, STACK, MESH, CONNECTIONS, COPY, bfsTraverse }  = require('./../dev.js');
 
 shapes._reset();
 
@@ -7,7 +7,7 @@ let control_vol = SYSTEM ({
     VISUALIZE : [
         {
             REPRESENTS : "U",
-            TOPOLOGY : shapes.point,
+            GEOMETRY : shapes.point,
             minval : 200,
             maxval : 220,
         }
@@ -37,7 +37,7 @@ let Sparent = SYSTEM();
 let main = () => {
     let N = 30;
     let M = 100;
-    CONNECT (Sparent) (MESH(control_vol, N, M));
+    SIMPLECONNECT (Sparent) (MESH(control_vol, N, M));
 }
 
 module.exports = {
