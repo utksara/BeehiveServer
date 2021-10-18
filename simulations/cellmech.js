@@ -3,63 +3,83 @@ const {shapes, calc, SYSTEM, SIMPLECONNECT, BICONNECT, CONNECT, CHAIN, STACK, ME
 
 shapes._reset();
 
-const Omega = 10; 
-const Dx = 0.01;
+const N = 3, M  = 30;
+const DR = 10;
+const DTheta = 2 * 3.14/(M); 
 
-let Sparent = SYSTEM();
+const Cellboundary = [100, 105, 110, 111, 110, 105, 100, 95, 90, 90, 95, 101, 100, 105, 110, 111, 110, 105, 100, 95, 90, 90, 95, 101, ];
+
+let Sparent = SYSTEM({
+    cellboundary : Cellboundary,
+    VISUALIZE : [
+        {
+            GEOMETRY : shapes.curve,
+            POSITION : [650,350],
+            MOVEMENT : "cellboundary",
+        },
+    ]
+});
 
 let calculate_traction = (async function (S){with (S){
-    T = T - omega*dx*T
-}})
-
-let increment_cellboundary = (async function (S){with (S){
-    
-    R = R + 10;
-    new_cell_boundary = [];
-
-    for (i = 0 ; i<cellboundary.length ; i++){
-        new_cell_boundary.push(cellboundary[i] * R * 0.01)
-    }
-
-    cellboundary = new_cell_boundary
+    position = [50 + center[0] + r * Math.cos(theta), center[1] + r * Math.sin(theta)]
+    theta = theta + dtheta;
+    r = r + dr
+    T = T - (Kr * T * dr * 0.001 + Ktheta * T * dtheta * 0.001);
+    trace.push(r)
 }})
 
 let S1 = SYSTEM ({
     NAME : "S1",
     T : 200,
-    R : 50, 
-    dx : Dx,
+    Kr : 1,
+    Ktheta : 0.1,
+    r : 100,
+    dr : DR,
+    dtheta : DTheta,
+    theta : 0,
+    R : 100,
     omega : 10,
     center: [600, 350],
-    cellboundary : [100, 100, 100], 
-    REQUIRE : ["T", "R",],    
+    position : [100,100],
+    trace :[], 
+    REQUIRE : ["theta", "r", "T", "trace"],   
     VISUALIZE :[
         {
             REPRESENTS : "T",
-            GEOMETRY : shapes.curve,
-            POSITION : [650,350],
-            MOVEMENT : "cellboundary",
-            maxval : 200,
-            minval : -200,
+            GEOMETRY : shapes.point,
+            POSITION : "position",
         },
-    ],
+    ], 
     PROCESS : [
-        calculate_traction, 
-        increment_cellboundary,
+        calculate_traction,
     ],
 });
 
-// let ScellBoundary = SYSTEM({
-//     NAME : "boundary"
-// });
+let Sboundary = SYSTEM({
+    NAME : "boundary",
+    trace : [],
+    T : 0,
+    trace :[],
+    REQUIRE : ["trace"],
+    VISUALIZE :[
+        {
+            GEOMETRY : shapes.curve,
+            POSITION : [650,350],
+            MOVEMENT : "trace",
+            LIGHT : true,
+        },
+    ],
+});
 
 let main = () => {
-    //-----Example 1-----------
-    let N = 4, M  = 4;
-    SIMPLECONNECT (Sparent) (STACK (CHAIN (S1, N), M))
-    bfsTraverse(Sparent, arg =>{
-        console.log(arg.ID, "-->", arg.TO)
-    })
+
+    let angularComponent = CHAIN (S1, M, ["theta", "T", "trace"]) ;
+    CONNECT(angularComponent)("trace")(Sboundary);
+    SIMPLECONNECT (Sparent) (STACK (angularComponent, N, ["r", "T"]))
+    
+    // bfsTraverse(Sparent, arg =>{
+    //     console.log(arg.ID, "-->", arg.TO)
+    // })
 }
 
 
