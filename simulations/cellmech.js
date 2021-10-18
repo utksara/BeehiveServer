@@ -3,8 +3,8 @@ const {shapes, calc, SYSTEM, SIMPLECONNECT, BICONNECT, CONNECT, CHAIN, STACK, ME
 
 shapes._reset();
 
-const N = 3, M  = 30;
-const DR = 10;
+const N = 30, M  = 30;
+const DR = 1;
 const DTheta = 2 * 3.14/(M); 
 
 const Cellboundary = [100, 105, 110, 111, 110, 105, 100, 95, 90, 90, 95, 101, 100, 105, 110, 111, 110, 105, 100, 95, 90, 90, 95, 101, ];
