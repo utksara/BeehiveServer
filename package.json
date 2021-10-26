@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "startsim" : "forever -w server.js",
-    "onetest" : "mocha -g",
-    "test": "mocha --reporter spec"
+    "startsim": "forever -w server.js",
+    "onetest": "mocha -g",
+    "test": "mocha --reporter spec",
+    "doc" : "jsdoc"
   },
   "author": "utk",
   "license": "ISC",
@@ -17,5 +18,8 @@
     "http-server": "^13.0.1",
     "mocha": "^9.1.0",
     "ws": "^7.4.5"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.6.7"
   }
 }
