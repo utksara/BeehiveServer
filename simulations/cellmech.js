@@ -50,7 +50,7 @@ let S1 = SYSTEM ({
             POSITION : "position",
         },
     ], 
-    PROCESS : [
+    PROCESSES : [
         calculate_traction,
     ],
 });

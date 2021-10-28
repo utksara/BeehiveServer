@@ -1,5 +1,5 @@
 module.exports.calc =require('./lib/calc.js');
-const {SYSTEM, CONNECTIONS, SIMPLECONNECT, BICONNECT, CHAIN, STACK, MESH, CONNECT, COPY, PATTERN} = require('./lib/beehive.js');
+const {SYSTEM, CONNECTIONS, SIMPLECONNECT, BICONNECT, CHAIN, STACK, MESH, CONNECT, COPY, PATTERN, PROCESS} = require('./lib/beehive.js');
 const {bfsTraverse} = require('./lib/beehiveUtils.js')
 
 module.exports.SYSTEM = SYSTEM;
@@ -13,6 +13,7 @@ module.exports.COPY = COPY;
 module.exports.PATTERN = PATTERN;
 module.exports.bfsTraverse = bfsTraverse;
 module.exports.CONNECT = CONNECT;
+module.exports.PROCESS = PROCESS;
 
 module.exports.shapes = require('./lib/shapes.js');
 const {_reset} = require('./lib/shapes.js');

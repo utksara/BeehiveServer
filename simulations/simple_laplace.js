@@ -20,7 +20,7 @@ let control_vol = SYSTEM ({
     d2Ux : 0,
     d2Uy : 0,
     REQUIRE : ["U", "dUx", "dUy", "dUxy", "d2Ux", "d2Uy"],    
-    PROCESS : [
+    PROCESSES : [
         (async function (S){with (S){
             dUx = dUx + del * d2Ux + del * dUxy
             dUy = dUy + del * dUxy + del * d2Uy

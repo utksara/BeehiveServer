@@ -21,7 +21,7 @@ let S1 = SYSTEM ({
     dx : Dx,
     omega : Omega,
     REQUIRE : ["P_1","P0"],    
-    PROCESS : [
+    PROCESSES : [
         p1
     ],
 });
@@ -34,7 +34,7 @@ let S2 = SYSTEM ({
     dx : Dx,
     omega : Omega,
     REQUIRE : ["P_1","P0"],    
-    PROCESS : [
+    PROCESSES : [
         p1
     ],
 });
@@ -55,7 +55,7 @@ let S3 = SYSTEM ({
             minval : -200,
         }
     ],
-    PROCESS : [
+    PROCESSES : [
         p1
     ],
 });

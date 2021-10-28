@@ -15,7 +15,7 @@ let S1 = SYSTEM ({
     ],
     Pressure : 200,
     REQUIRE : ["Pressure"],    
-    PROCESS : [
+    PROCESSES : [
         (async function (S){with (S){
             Pressure = 0.95 * Pressure
         }})

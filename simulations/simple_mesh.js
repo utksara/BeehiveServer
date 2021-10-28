@@ -18,7 +18,7 @@ let control_vol = SYSTEM ({
     dy : 0.1,
     divP : 0,
     REQUIRE : ["Px", "Py"],    
-    PROCESS : [
+    PROCESSES : [
         (async function (S){with (S){
             dPx = 0.08 * (Px + Py);
             dPy = 0.1 * (Px + Py);

@@ -43,7 +43,7 @@ let S1 = SYSTEM ({
             minval : -200,
         }
     ],
-    PROCESS : [
+    PROCESSES : [
         calculate_traction, 
         increment_cellboundary,
     ],

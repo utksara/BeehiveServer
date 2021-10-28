@@ -9,7 +9,7 @@ let S1 = SYSTEM ({
     NAME : "S1",
     Pressure : 200,
     REQUIRE : ["Pressure"],    
-    PROCESS : [
+    PROCESSES : [
         (async function (S){with (S){
             Pressure = 0.95 * Pressure
         }})
@@ -20,7 +20,7 @@ let S2 = SYSTEM ({
     NAME : "S2",
     Pressure : 200,
     REQUIRE : ["Pressure"],    
-    PROCESS : [
+    PROCESSES : [
         (async function (S){with (S){
             Pressure = 0.95 * Pressure
         }})
@@ -42,7 +42,7 @@ let S3 = SYSTEM ({
     omega :2,
     delPressure : 0,
     REQUIRE : ["Pressure", "delPressure"],    
-    PROCESS : [
+    PROCESSES : [
         (async function (S){with (S){
             Pressure = Pressure + delta * delPressure
             delPressure = delPressure + delta * omega * (-Pressure)

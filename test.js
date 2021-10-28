@@ -220,7 +220,7 @@ describe('Beehive functions', function() {
                 ],
                 Pressure : 200,
                 REQUIRE : ["Pressure"],    
-                PROCESS : [
+                PROCESSES : [
                     (async function (S){with (S){
                         Pressure = 0.95 * Pressure
                     }})
