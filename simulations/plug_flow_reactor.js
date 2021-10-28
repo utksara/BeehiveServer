@@ -15,9 +15,14 @@ let Sparent = SYSTEM({
     Cr : InitConc,
 });
 
+x = ()=>{
+    x = x +1
+    t = t -2
+}
+
 let calculate_concentration = (async function (S){with (S){
-    r = r + dr,
-    z = z + dz,
+    r = r + dr
+    z = z + dz
     reaction_rate = k * Cz
     // console.log((reaction_rate - D * del2Cz - D * del2Cr - U * D * delCr / r)*dz/U)
     // C = Cz + (-reaction_rate - D * del2Cz - D * del2Cr - D * delCr / r)*dz/U
