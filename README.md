@@ -159,6 +159,51 @@ We require a new bunch of functions for network architechture. We will go throug
     CONNECT (S1 (Q1, Q2) (S2)
     ```
 
-    In above example, we have connection S1--->S2 like the previous case, and we have shared quantities as Q1, Q2, Q3. But on running the program, it will only update Q1 and Q2, as they are the only specified variables in the middle arguement
+    In above example, we have connection S1--->S2 like the previous case, and we have shared quantities as Q1, Q2, Q3. But on running the program, it will only update Q1 and Q2 in the child system S2 from 100 to 10 and 200 to 20 respectively, as Q1 and Q2 are the only specified variables in the middle arguement
+
+3. COPYSYSTEM (system_to_be_copied : SYSTEM, paramters_specification : jsonObject) : SYSTEM 
+
+    This function duplicates a given system for every **varam** (from now on we will use varam as acronym for variables and paramters) except the one specified in the second arguement of parameters_specifaction
+
+    >Example :
+
+    ```
+    let S1 = {
+        NAME : "S1",
+        Q : 10,
+        R : 20,
+    }
+
+    let S2 = COPYSYSTEM(S1, {NAME : "S2"})
+
+    //  the S2 will look like 
+    // {
+    //     NAME : "S2",
+    //     Q : 10,
+    //     R : 20,
+    // }
+    ```
+
+    In the above example, everything except NAME is copied in S2
 
 
+Now, so far whatever functions we have discussed, are sufficient to create any kind of SYSTEMS network, but we need more functions to create networks in an easier and efficient way, as real life simulations require very complex and large networks to work with, just like a beehive!
+
+4. CHAIN (system : SYSTEM, number_of_systems_in_chain : Integer)
+
+    Creates identical copies of a system and sumpleconnect them in a sequentially, returning the first element of the chain. Remember that the connection occurs only between the copies of the object passed initially, and not the object itsef. This makes the object resuable in its original form.
+
+    >Example
+
+    ```
+        let S1 = {
+            NAME : "S1",
+            Q : 10,
+            R : 20,
+        }
+        let Schained = CHAIN(S, N)
+    ```
+    Above code will form chain as shown below
+
+    ![Chained system]
+    (images/chain.png)
