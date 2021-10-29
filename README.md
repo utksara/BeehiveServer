@@ -206,4 +206,4 @@ Now, so far whatever functions we have discussed, are sufficient to create any k
     Above code will form chain as shown below
 
     ![Chained system]
-    (https://github.com/utksara/cellmech_server/blob/main/images/chain.png)
+    (https://github.com/utksara/cellmech_server/blob/main/images/chain.png?raw=true)
