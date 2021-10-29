@@ -228,7 +228,7 @@ Now, so far whatever functions we have discussed, are sufficient to create any k
 
     As the name suggest, this function create MxN mesh network of MxN identical copies of a system with given x flow and y flow paramters
 
-    Example
+    >Example
     ```
         let S1 = {
             NAME : "S1",
@@ -242,7 +242,7 @@ Now, so far whatever functions we have discussed, are sufficient to create any k
 
 7. CHAIN + STACK
 
-    Example
+    >Example
     ```
         let S1 = {
             NAME : "S1",
@@ -256,7 +256,7 @@ Now, so far whatever functions we have discussed, are sufficient to create any k
 
 
 8. CHAIN + MESH
-    Example
+    >Example
     ```
         let S1 = {
             NAME : "S1",
@@ -270,13 +270,32 @@ Now, so far whatever functions we have discussed, are sufficient to create any k
 9. PATTERN (system : SYSTEM, relocationobejct : jsonObject, N : Integer) : SYSTEM
 
     Most complex recurring network cannot be designed by MESH, CHAIN or STACK. To design any kind of recurring network, PATTERN function is used.
-    Example
+    >Example
     ```
         let S1 = {
             NAME : "S1",
-            Q : 10,
-            R : 20,
+            Q0 : 10,
+            Q1 : 20,
         }
+
+        let S2 = {
+            NAME : "S1",
+            Q0 : 10,
+            Q1 : 20,
+        }
+
+        let S3 = {
+            NAME : "S1",
+            Q0 : 10,
+            Q1 : 20,
+        }
+
+        CONNECT (S1) ("Q0") (S2)
+        CONNECT (S1) ("Q1") (S3)
+        CONNECT (S2) ("Q0") (S3)
         let Spattern = PATTERN(S1, {'S1' : 'S2', 'S2' : 'S3'}, 3)
     ```
+
+    By the second argument relocationobejct, what we provide is in the recurring pattern of a given unit via telling which subunit of given unit has to replace which subunit in next unit. In the given example, to make the recurring pattern of the unit in the first figure, S1 has to be replaced S2 and S3 has to be replaced by S2. 
+
     ![STACK + CHAIN](https://github.com/utksara/cellmech_server/blob/main/images/pattern.png?raw=true)
