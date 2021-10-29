@@ -189,7 +189,7 @@ We require a new bunch of functions for network architechture. We will go throug
 
 Now, so far whatever functions we have discussed, are sufficient to create any kind of SYSTEMS network, but we need more functions to create networks in an easier and efficient way, as real life simulations require very complex and large networks to work with, just like a beehive!
 
-4. CHAIN (system : SYSTEM, number_of_systems_in_chain : Integer)
+4. CHAIN (system : SYSTEM, number_of_systems_in_chain : Integer) : SYSTEM
 
     Creates identical copies of a system and sumpleconnect them in a sequentially, returning the first element of the chain. Remember that the connection occurs only between the copies of the object passed initially, and not the object itsef. This makes the object resuable in its original form.
 
@@ -201,9 +201,82 @@ Now, so far whatever functions we have discussed, are sufficient to create any k
             Q : 10,
             R : 20,
         }
-        let Schained = CHAIN(S, N)
+        let Schained = CHAIN(S, 4)
     ```
     Above code will form chain as shown below
 
-    ![Chained system]
-    (https://github.com/utksara/cellmech_server/blob/main/images/chain.png?raw=true)
+    ![Chained system](https://github.com/utksara/cellmech_server/blob/main/images/chain.png?raw=true)
+
+
+5. STACK (system : SYSTEM, number_of_systems_in_chain : Integer): SYSTEM
+
+    The stack function allows you to 1) Process similar systems independently at once 2)
+    Expand or split your system into smaller units. It does is by making identical copies of a system as done in chain but instead of lining them up, all copies are connected in parallel
+
+    >Example
+    ```
+        let S1 = {
+            NAME : "S1",
+            Q : 10,
+            R : 20,
+        }
+        let Sstacked = STACK(S, 4)
+    ```
+    ![Stacked system](https://github.com/utksara/cellmech_server/blob/main/images/stack.png?raw=true)
+
+6. MESH (system : SYSTEM, M : Integer, N  : Integer, x_flow_parameters : Array[variables], y_flow_parameters : Array[variables])
+
+    As the name suggest, this function create MxN mesh network of MxN identical copies of a system with given x flow and y flow paramters
+
+    Example
+    ```
+        let S1 = {
+            NAME : "S1",
+            Q : 10,
+            R : 20,
+        }
+        let Smeshed = MESH(S1, 3, 3, [Q],[R])
+    ```
+
+    ![Mesh system](https://github.com/utksara/cellmech_server/blob/main/images/mesh.png?raw=true)
+
+7. CHAIN + STACK
+
+    Example
+    ```
+        let S1 = {
+            NAME : "S1",
+            Q : 10,
+            R : 20,
+        }
+        let S = CHAIN(MESH(S1, 2), 3))
+    ```
+
+    ![CHAIN + STACK](https://github.com/utksara/cellmech_server/blob/main/images/chainstack.png?raw=true)
+
+
+8. CHAIN + MESH
+    Example
+    ```
+        let S1 = {
+            NAME : "S1",
+            Q : 10,
+            R : 20,
+        }
+        let S = CHAIN(MESH(S1, 2), 3))
+    ```
+    ![STACK + CHAIN](https://github.com/utksara/cellmech_server/blob/main/images/stackchain.png?raw=true)
+
+9. PATTERN (system : SYSTEM, relocationobejct : jsonObject, N : Integer) : SYSTEM
+
+    Most complex recurring network cannot be designed by MESH, CHAIN or STACK. To design any kind of recurring network, PATTERN function is used.
+    Example
+    ```
+        let S1 = {
+            NAME : "S1",
+            Q : 10,
+            R : 20,
+        }
+        let Spattern = PATTERN(S1, {'S1' : 'S2', 'S2' : 'S3'}, 3)
+    ```
+    ![STACK + CHAIN](https://github.com/utksara/cellmech_server/blob/main/images/pattern.png?raw=true)
