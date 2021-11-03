@@ -33,7 +33,7 @@ let visualize = async (jsonobj, ws) => {
     //             });
     //         });
     //     });
-    ws.send(JSON.stringify(jsonobj))
+    ws.send(JSON.stringify({"vis":jsonobj}))
 };
 
 let update  = function (ws) {
@@ -42,6 +42,7 @@ let update  = function (ws) {
     let jsonobj = {};
     (async ()=>{
         let array_of_items = await run
+        console.log(array_of_items)
         return array_of_items;
     })().then(async array_of_items => {
         visualize (array_of_items, ws)
@@ -56,7 +57,7 @@ wss.on("connection" , ws => {
     });
 
     ws.onmessage =( e => {
-        var msg = e.datavisualize;        
+        var msg = e.datavisualize;    
         fs.writeFile('inputoutput/input_data.json', msg, (err) => {
             if (err) throw err;
             console.log('Data written to file');
