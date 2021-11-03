@@ -18,62 +18,59 @@ var wss = new WebSocketServer({
     port: 8082
 });
 
-let visualize = async (jsonobj, ws) => {
-    // array_of_items.forEach(elementouter => {
-    //     elementouter.VISUALIZE.forEach(element => {
-    //         (async ()=>{
-    //             element._param = element._param?element._param:{};
-    //             return await element.GEOMETRY(element._param).generate()
-    //         })().then(value => {
-    //             jsonobj = {
-    //                     "id" : "shape" + elementouter.ID,
-    //                     "svg" : value,
-    //                     "fill" : element.color? element.color:'none',
-    //                     "stroke" : colorMap(elementouter[element.REPRESENTS])==='none' ? "blue" : colorMap(elementouter[element.REPRESENTS]),
-    //                     "width" : 1
-    //                 }
-    //                 ws.send(JSON.stringify(jsonobj));
-    //             });
-    //         });
-    //     });
+const visualize = async (jsonobj, ws) => {
     const data_to_be_send = {"vis":jsonobj} 
     const message = "Sending data to cleint : " + JSON.stringify(data_to_be_send) 
     logger.info(message);
     ws.send(JSON.stringify(data_to_be_send))
 };
 
-let update  = async function (ws) {
-    reset();
+const update_simulation  = async function (websocket) {
+    logger.info("updated simulation");
     console.log("updating");
+
+    reset();
     let array_of_items = await run
-    await visualize (array_of_items, ws)
+    await visualize (array_of_items, websocket)
 }
 
-wss.on("connection" , ws => {
-    update(ws);
+const execute_data_cell_processing = async (websocket)=>{
+    child = exec(`./cpp_bins/main`,
+    function (error, stdout, stderr) {
+        if (error !== null) {
+            console.log('exec error: ' + error);
+        }
+        console.log(stdout);
+        try {
+            const output_data = JSON.parse(fs.readFileSync('inputoutput/output_data.json', 'utf8'));
+            websocket.send(output_data.data);
+            } catch (err) {
+            console.error(err)
+        };
+    });
+}
+
+const intiate_simulation = async (websocket) => {
+    await update_simulation(websocket);
     console.log("New client connected");
-    ws.on("close", () => {
+    websocket.on("close", () => {
         console.log("Client has disconnected");
     });
+}
 
-    ws.onmessage =( e => {
-        var msg = e.datavisualize;    
-        fs.writeFile('inputoutput/input_data.json', msg, (err) => {
-            if (err) throw err;
-            console.log('Data written to file');
-        });
-        child = exec(`./cpp_bins/main`,
-        function (error, stdout, stderr) {
-            if (error !== null) {
-                console.log('exec error: ' + error);
-            }
-            console.log(stdout);
-            try {
-                const output_data = JSON.parse(fs.readFileSync('inputoutput/output_data.json', 'utf8'));
-                ws.send(output_data.data);
-              } catch (err) {
-                console.error(err)
-            };
-        }); 
+const register_data = data => {
+    var msg = data.vis;    
+    fs.writeFileSync('inputoutput/input_data.json', msg, (err) => {
+        if (err) throw err;
+        console.log('Data written to file');
+    });
+}
+
+wss.on("connection" , async ws => {
+    intiate_simulation(ws);
+    ws.onmessage =(async data => {
+        register_data(data);
+        await update_simulation(ws);
+        await execute_data_cell_processing(ws);
     });
 });
