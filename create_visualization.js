@@ -1,16 +1,16 @@
 import * as beehive from './lib/beehive.js'
 
-function _render(sys) {
-    document.getElementById(ssy.ID).setAttribute('points', get_points(sys.topology));
+function _render(system) {
+    document.getElementById(ssy.ID).setAttribute('points', get_points(system.topology));
 }
 const xmlns = "http://www.w3.org/2000/svg";
 
 function init_setup(){
     document.getElementById("canvas").setAttribute('height',600);
     document.getElementById("canvas").setAttribute('width',1050);
-    // Array_of_shapes.forEach ( (sys) =>_render(sys))
-    beehive.Array_of_shapes.forEach( (sys)=> {
-        var g = document.createElementNS(xmlns, sys.ID);
+    // Array_of_shapes.forEach ( (system) =>_render(system))
+    beehive.Array_of_shapes.forEach( (system)=> {
+        var g = document.createElementNS(xmlns, system.ID);
         var cntr1 = document.createElementNS(xmlns, "path");
         // cntr1.setAttributeNS(null, 'id', "cntr1");
         // cntr1.setAttribute(null, 'fill');
@@ -28,7 +28,7 @@ init_setup();
 
 function simulate(){
     if (!break_sim){
-        beehive.Array_of_shapes.forEach ( (sys) =>_render(sys))
+        beehive.Array_of_shapes.forEach ( (system) =>_render(system))
     }
 }
 setInterval(simulate, 10);

@@ -2,6 +2,7 @@ jstests.js
 simulations/livebeehive.js
 node_modules/
 *.cpp
+*.log
 *.html
 *.json
 cpp_modules/

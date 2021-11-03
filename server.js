@@ -1,19 +1,22 @@
 
 const fs = require("fs");
 const exec = require('child_process').exec;
-var {run} = require('./systemdef.js')
-var {reset} = require('./dev.js')
-var {colorMap} = require('./lib/calc.js')
+const {run} = require('./systemdef.js')
+const {reset} = require('./dev.js')
+const {loggerCreator} = require('./loggerConfig.js')
+
 // var privateKey  = fs.readFileSync('certs/key.pem', 'utf8');
 // var certificate = fs.readFileSync('certs/cert.pem', 'utf8');
 
 // var credentials = {key: privateKey, cert: certificate};
+const message_prefix = "server data exchange : " 
+const logger = loggerCreator(message_prefix)
+
 
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({
     port: 8082
 });
-
 
 let visualize = async (jsonobj, ws) => {
     // array_of_items.forEach(elementouter => {
@@ -33,20 +36,17 @@ let visualize = async (jsonobj, ws) => {
     //             });
     //         });
     //     });
-    ws.send(JSON.stringify({"vis":jsonobj}))
+    const data_to_be_send = {"vis":jsonobj} 
+    const message = "Sending data to cleint : " + JSON.stringify(data_to_be_send) 
+    logger.info(message);
+    ws.send(JSON.stringify(data_to_be_send))
 };
 
-let update  = function (ws) {
+let update  = async function (ws) {
     reset();
     console.log("updating");
-    let jsonobj = {};
-    (async ()=>{
-        let array_of_items = await run
-        console.log(array_of_items)
-        return array_of_items;
-    })().then(async array_of_items => {
-        visualize (array_of_items, ws)
-    })
+    let array_of_items = await run
+    await visualize (array_of_items, ws)
 }
 
 wss.on("connection" , ws => {
