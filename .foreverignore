@@ -1,4 +1,5 @@
 jstests.js
+simulations/livebeehive.js
 node_modules/
 *.cpp
 *.html

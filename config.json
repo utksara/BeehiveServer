@@ -1,6 +1,6 @@
 {
     "DEBUG" : true,
-    "DEBUGPROCESSES" : false,
+    "DEBUGPROCESSES" : true,
     "DEBUGSYSTEMS" : false,
     "DEBUGPARAMS" : false 
 }
