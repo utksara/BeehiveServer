@@ -66,11 +66,32 @@ const register_data = data => {
     });
 }
 
+const accept_simulation_from_client = data => {
+    var msg = data.simulation_data;    
+    fs.writeFileSync('simulations/livebeehive.js', msg, (err) => {
+        if (err) throw err;
+        console.log('Data written to file');
+    });
+}
+
 wss.on("connection" , async ws => {
     intiate_simulation(ws);
-    ws.onmessage =(async data => {
-        register_data(data);
-        await update_simulation(ws);
-        await execute_data_cell_processing(ws);
+    ws.onmessage =(async blobdata => {
+        const data = JSON.parse(blobdata.data);
+        console.log(data)
+        const message = "recived data from client as " + JSON.stringify(data)
+        logger.info(message);
+        if ("simulation_data" in data){
+            console.log("received simulation data from cleint");
+            const message = "received simulation data from cleint ";
+            logger.info(message);
+
+            accept_simulation_from_client(data);
+            await update_simulation(ws);
+        }
+        if ("cellmech_data" in data){
+            register_data(data);
+            await execute_data_cell_processing(ws);
+        }
     });
 });
