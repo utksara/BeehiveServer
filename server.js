@@ -1,10 +1,12 @@
 
 const fs = require("fs");
+const util = require("util");
 const exec = require('child_process').exec;
 const {run} = require('./systemdef.js')
 const {reset} = require('./dev.js')
 const {loggerCreator} = require('./loggerConfig.js')
 
+const exec_promise =  util.promisify(exec);
 // var privateKey  = fs.readFileSync('certs/key.pem', 'utf8');
 // var certificate = fs.readFileSync('certs/cert.pem', 'utf8');
 
@@ -18,11 +20,16 @@ var wss = new WebSocketServer({
     port: 8082
 });
 
+const run_simulation = async () => {
+    let output = (await exec_promise(`node ${process.cwd()}/runSimulation.js`)).stdout;
+    console.log(output)
+}
+
 const visualize = async (jsonobj, ws) => {
-    const data_to_be_send = {"vis":jsonobj} 
-    const message = "Sending data to cleint : " + JSON.stringify(data_to_be_send) 
+    const data_to_be_send = {"vis":jsonobj};
+    const message = "Sending data to cleint : " + JSON.stringify(data_to_be_send);
     logger.info(message);
-    ws.send(JSON.stringify(data_to_be_send))
+    ws.send(JSON.stringify(data_to_be_send));
 };
 
 const update_simulation  = async function (websocket) {
@@ -30,7 +37,10 @@ const update_simulation  = async function (websocket) {
     console.log("updating");
 
     reset();
+    // await run_simulation();
+    // let array_of_items;
     let array_of_items = await run
+    console.log(array_of_items)
     await visualize (array_of_items, websocket)
 }
 
@@ -50,7 +60,7 @@ const execute_data_cell_processing = async (websocket)=>{
     });
 }
 
-const intiate_simulation = async (websocket) => {
+const initiate_simulation = async (websocket) => {
     await update_simulation(websocket);
     console.log("New client connected");
     websocket.on("close", () => {
@@ -75,7 +85,7 @@ const accept_simulation_from_client = data => {
 }
 
 wss.on("connection" , async ws => {
-    intiate_simulation(ws);
+    initiate_simulation(ws);
     ws.onmessage =(async blobdata => {
         const data = JSON.parse(blobdata.data);
         console.log(data)
@@ -90,6 +100,10 @@ wss.on("connection" , async ws => {
             await update_simulation(ws);
         }
         if ("cellmech_data" in data){
+            console.log("received cell data from cleint");
+            const message = "received cell data from cleint ";
+            logger.info(message);
+
             register_data(data);
             await execute_data_cell_processing(ws);
         }
