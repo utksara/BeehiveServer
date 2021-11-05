@@ -39,8 +39,7 @@ const update_simulation  = async function (websocket) {
     reset();
     // await run_simulation();
     // let array_of_items;
-    let array_of_items = await run
-    console.log(array_of_items)
+    let array_of_items = await run;
     await visualize (array_of_items, websocket)
 }
 

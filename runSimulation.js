@@ -17,10 +17,10 @@ const logger = loggerCreator(message_prefix)
 const update_simulation  = async function () {
     reset();
     let array_of_items = await run
-    console.log("pusheen  array of items", array_of_items)
 }
 
 const initiate_simulation = async () => {
+    console.log("calling update_simulation");
     await update_simulation();
     console.log("New client connected");
 }
