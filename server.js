@@ -22,13 +22,13 @@ var wss = new WebSocketServer({
 
 const run_simulation = async () => {
     let output = (await exec_promise(`node ${process.cwd()}/runSimulation.js`)).stdout;
-    console.log(output)
 }
 
-const visualize = async (jsonobj, ws) => {
-    const data_to_be_send = {"vis":jsonobj};
+const visualize = async (json_obj, ws) => {
+    const data_to_be_send = {"vis":json_obj};
     const message = "Sending data to cleint : " + JSON.stringify(data_to_be_send);
     logger.info(message);
+    console.log("Sending data to cleint : ", data_to_be_send.vis.length);
     ws.send(JSON.stringify(data_to_be_send));
 };
 
@@ -37,9 +37,10 @@ const update_simulation  = async function (websocket) {
     console.log("updating");
 
     reset();
-    // await run_simulation();
-    // let array_of_items;
-    let array_of_items = await run;
+    await run_simulation();
+    let array_of_items = JSON.parse(fs.readFileSync('inputoutput/output_data.json', 'utf8'));
+    console.log("pusheen vis array length", array_of_items.length);
+    // let array_of_items = await run;
     await visualize (array_of_items, websocket)
 }
 
@@ -75,7 +76,7 @@ const register_data = data => {
     });
 }
 
-const accept_simulation_from_client = data => {
+const accept_simulation_from_client = async data => {
     var msg = data.simulation_data;    
     fs.writeFileSync('simulations/livebeehive.js', msg, (err) => {
         if (err) throw err;
@@ -95,7 +96,7 @@ wss.on("connection" , async ws => {
             const message = "received simulation data from cleint ";
             logger.info(message);
 
-            accept_simulation_from_client(data);
+            await accept_simulation_from_client(data);
             await update_simulation(ws);
         }
         if ("cellmech_data" in data){

@@ -20,7 +20,6 @@ const update_simulation  = async function () {
 }
 
 const initiate_simulation = async () => {
-    console.log("calling update_simulation");
     await update_simulation();
     console.log("New client connected");
 }
