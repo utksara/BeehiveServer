@@ -1,7 +1,6 @@
 node_modules/
 *.o
 .vscode/
-main
 data.
 calculations
 bahav/
