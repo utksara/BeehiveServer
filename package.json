@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "startsim": "forever -w server.js",
+    "startsim": "nohup node server.js & disown",
     "onetest": "mocha -g",
     "test": "mocha --reporter spec",
     "doc": "jsdoc"
