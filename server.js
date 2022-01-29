@@ -20,6 +20,20 @@ var wss = new WebSocketServer({
     port: 8082
 });
 
+const startup_scripts = () => {
+    child = exec(`python3 ./scripts/startup.py`,
+    function (error, stdout, stderr) {
+        if (error !== null) {
+            console.log('exec error: ' + error);
+        }
+        console.log(stderr);
+        console.log(stdout);
+    });
+
+}
+
+startup_scripts();
+
 const run_simulation = async () => {
     let output = (await exec_promise(`node ${process.cwd()}/runSimulation.js`)).stdout;
 }
