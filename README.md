@@ -6,10 +6,8 @@ Beehive is a web-based interface for modelling and simulation with utility to pr
 
 Just see for yourself how it looks :)
 
-- Simple second order differenttial equation
-- Laplace equation
-- Simple plug flow reactor
-- simple calculation of traction from a cell
+- [Simple second order differenttial equation](http://ec2-18-234-227-168.compute-1.amazonaws.com:3000/second-order-ode)
+- [Laplace equation](http://ec2-18-234-227-168.compute-1.amazonaws.com:3000/simple-laplace)
 
 ## How it works
 

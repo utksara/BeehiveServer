@@ -38,11 +38,13 @@ const run_simulation = async () => {
     let output = (await exec_promise(`node ${process.cwd()}/runSimulation.js`)).stdout;
 }
 
-const visualize = async (json_obj, ws) => {
-    const data_to_be_send = {"vis":json_obj};
+const send_data = async (json_obj, ws, key_string) => {
+    const data_to_be_send = {};
+    data_to_be_send[`${key_string}`] = json_obj
     const message = "Sending data to cleint : " + JSON.stringify(data_to_be_send);
     logger.info(message);
-    console.log("Sending data to cleint : ", data_to_be_send.vis.length);
+    // console.log(data_to_be_send)
+    // console.log("Sending data to cleint : ", data_to_be_send[`${key_string}`].length);
     ws.send(JSON.stringify(data_to_be_send));
 };
 
@@ -55,7 +57,13 @@ const update_simulation  = async function (websocket) {
     let array_of_items = JSON.parse(fs.readFileSync('inputoutput/output_data.json', 'utf8'));
     console.log("pusheen vis array length", array_of_items.length);
     // let array_of_items = await run;
-    await visualize (array_of_items, websocket)
+    await send_data(array_of_items, websocket, "vis")
+}
+
+const update_text_area = async function(websocket, data) {
+    var fileName = data.simulation_request;
+    let array_of_items = JSON.parse(fs.readFileSync(`simulations/${fileName}.js`, 'utf8'));
+    await send_data(array_of_items, websocket, "text_area")
 }
 
 const execute_data_cell_processing = async (websocket)=>{
@@ -98,6 +106,14 @@ const accept_simulation_from_client = async data => {
     });
 }
 
+const accept_simulation_request = async data => {
+    var fileName = data.simulation_request;  
+    fs.copyFile(`simulations/${fileName}.js`, 'simulations/livebeehive.js',(err) => {
+        if (err) throw err;
+        console.log('Data written to file');
+    });
+}
+
 wss.on("connection" , async ws => {
     initiate_simulation(ws);
     ws.onmessage =(async blobdata => {
@@ -120,6 +136,17 @@ wss.on("connection" , async ws => {
 
             register_data(data);
             await execute_data_cell_processing(ws);
+        }
+        if ("simulation_request" in data){
+
+            console.log("received simulation request from cleint");
+            const message = "received simulation request from cleint ";
+            logger.info(message);
+
+            await accept_simulation_request(data);
+            await update_simulation(ws);
+            await update_text_area(ws, data);
+
         }
     });
 });
