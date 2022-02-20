@@ -123,7 +123,7 @@ We require a new bunch of functions for network architechture. We will go throug
         PROCESSES : [p1, p2]
     })
 
-    S1 = SYSTEM({
+    S2 = SYSTEM({
         Q1 : 20,
         Q3 : 30,
         PROCESSES : [p1, p2]
