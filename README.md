@@ -148,7 +148,7 @@ We require a new bunch of functions for network architechture. We will go throug
         Q3 : 30,
     })
 
-    let S1 = SYSTEM({
+    let S2 = SYSTEM({
         Q1 : 100,
         Q2 : 200,
         Q3 : 300,

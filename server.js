@@ -14,13 +14,18 @@ const exec_promise =  util.promisify(exec);
 const message_prefix = "server data exchange : " 
 const logger = loggerCreator(message_prefix)
 
+let startup_windows = function () {
+    child = exec(`py ./scripts/startup.py`,
+    function (error, stdout, stderr) {
+        if (error !== null) {
+            console.log('exec error: ' + error);
+        }
+        console.log(stderr);
+        console.log(stdout);
+    });
+}
 
-var WebSocketServer = require('ws').Server;
-var wss = new WebSocketServer({
-    port: 8082
-});
-
-const startup_scripts = () => {
+let startup_linux = function () {
     child = exec(`python3 ./scripts/startup.py`,
     function (error, stdout, stderr) {
         if (error !== null) {
@@ -29,7 +34,20 @@ const startup_scripts = () => {
         console.log(stderr);
         console.log(stdout);
     });
+}
 
+var WebSocketServer = require('ws').Server;
+var wss = new WebSocketServer({
+    port: 8082
+});
+
+const startup_scripts = () => {
+    if (process.platform.includes("win")){
+        startup_windows();        
+    }
+    if (process.platform.includes("linux")){
+        startup_linux();        
+    }
 }
 
 startup_scripts();
