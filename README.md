@@ -11,11 +11,11 @@ Just see for yourself how it looks :)
 
 ## How it works
 
-THere are three main concepts that are used in Beehive
+A lot of things being done in Beehive is very similar to GraphLab( an opensource machine learning module). In GraphLab, the machine learning problem has been broken down into MRF (Markov Random Fields) and processed in form of Loopy Belief Propogation. There are user definedupdate Function is analogous to the Map in MapReduce, but unlike in MapReduce, update functions are are able to process shared parameters as well. There is a shared data table(SDT) whcih stores the blocks of data in the graph ni a key value pair. More on GraphLab can be found at 
 
-- [Actor model](https://en.wikipedia.org/wiki/Actor_model)
-- [Directed graphs](https://en.wikipedia.org/wiki/Directed_graph)
-- [Dataflow programming](https://en.wikipedia.org/wiki/Dataflow_programming)
+- [GraphLab](https://arxiv.org/ftp/arxiv/papers/1408/1408.2041.pdf)
+
+In beehive, the user is able to design the structure of the graph and define properties of each node along with its local paramters, shared parameters and "processes". The nodes are named as SYSTEM and multiple insrtances can be created of a given SYSTEM with each of its properties replicated. The processes in beehive are analogius to update functions in graphlab and can process local parameters as well as shared parameters. Similarly like SDT, all the nodal data are directly stored as key value pair with key as "ID" of a system and value as the js object containing the information of a system instance.
 
 Inspiration of the name **Beehive** is from the idea of the complex network in which honeybees in a beehive interact. The key idea behind the beehive is to design any simulation via architecture of a graphical network.
 
@@ -148,7 +148,7 @@ We require a new bunch of functions for network architechture. We will go throug
         Q3 : 30,
     })
 
-    let S1 = SYSTEM({
+    let S2 = SYSTEM({
         Q1 : 100,
         Q2 : 200,
         Q3 : 300,
