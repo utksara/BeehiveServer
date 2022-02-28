@@ -2,6 +2,13 @@
 
 Beehive is a web-based interface for modelling and simulation with utility to provide a custom visualistion. Using Beehive, you can design any system, discrete as well as continous you want to simulate. 
 
+## Keywords
+
+- data flow
+- directional graphs
+- loopy belief propogation
+- cluster graphs
+- actor model
 ## Examples
 
 Just see for yourself how it looks :)
