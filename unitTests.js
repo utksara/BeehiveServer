@@ -2,7 +2,7 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const {shapes, SYSTEM, SIMPLECONNECT, CHAIN, MESH, CONNECTIONS, COPY, PATTERN, bfsTraverse}  = require('./dev.js');
-const {_push_sys, _search_by, _run_system} = require('./lib/beehive.js')
+const {_push_sys, _search_by, run_system} = require('./lib/beehive.js')
 const {register} = require('./lib/sendingData.js');
 const {dfsTraverse} = require('./lib/beehiveUtils')
 
@@ -242,7 +242,7 @@ describe('Beehive functions', function() {
             // let Schained = CHAIN(control_vol, N);
             // SIMPLECONNECT (Sparent) (STACK(Schained, N, { Pressure : PressureGen(Nshelf) }));
             SIMPLECONNECT (Sparent) (MESH(control_vol, N, N))
-            await _run_system(Sparent);
+            await run_system(Sparent);
             assert(1 === 1, true);
 
         });
