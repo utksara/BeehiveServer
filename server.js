@@ -1,10 +1,11 @@
 
+const req = require("express/lib/request");
 const fs = require("fs");
 const util = require("util");
 const exec = require('child_process').exec;
-const {run} = require('./systemdef.js')
 const {reset} = require('./dev.js')
 const {loggerCreator} = require('./loggerConfig.js')
+const {run_simulation} = require('./runSimulation.js')
 
 const exec_promise =  util.promisify(exec);
 // var privateKey  = fs.readFileSync('certs/key.pem', 'utf8');
@@ -52,26 +53,35 @@ const startup_scripts = () => {
 
 startup_scripts();
 
-const run_simulation = async () => {
-    let output = (await exec_promise(`node ${process.cwd()}/runSimulation.js`)).stdout;
+const run_simulation_async = async () => {
+    // await run_simulation();
+    // await exec_promise(`node ${process.cwd()}/runSimulation.js`, (error, stdout, stderr) => {
+    //     if (error) {
+    //       console.error(`exec error: ${error}`);
+    //       return;
+    //     }
+    //     console.log(`stdout: ${stdout}`);
+    //     console.error(`stderr: ${stderr}`);
+    //   });
+    
+    await exec_promise(`node ${process.cwd()}/runSimulation.js`);
 }
 
 const send_data = async (json_obj, ws, key_string) => {
-    const data_to_be_send = {};
-    data_to_be_send[`${key_string}`] = json_obj
-    const message = "Sending data to cleint : " + JSON.stringify(data_to_be_send);
-    logger.info(message);
-    // console.log(data_to_be_send)
-    // console.log("Sending data to cleint : ", data_to_be_send[`${key_string}`].length);
-    ws.send(JSON.stringify(data_to_be_send));
+    const data_to_be_sent = {};
+    data_to_be_sent[`${key_string}`] = json_obj
+    const message = "Sending data to cleint : " + JSON.stringify(data_to_be_sent);
+    logger.info("Sending data to cleint");
+    // console.log("Sending data to cleint : ", data_to_be_sent[`${key_string}`].length);
+    ws.send(JSON.stringify(data_to_be_sent));
+    console.log("Sending data to client")
 };
 
 const update_simulation  = async function (websocket) {
     logger.info("updated simulation");
-    console.log("updating");
-
-    reset();
-    await run_simulation();
+    console.log("updating simulation");
+    reset(); 
+    await run_simulation_async()
     let array_of_items = JSON.parse(fs.readFileSync('inputoutput/output_data.json', 'utf8'));
     console.log("pusheen vis array length", array_of_items.length);
     // let array_of_items = await run;
@@ -136,8 +146,7 @@ wss.on("connection" , async ws => {
     initiate_simulation(ws);
     ws.onmessage =(async blobdata => {
         const data = JSON.parse(blobdata.data);
-        console.log(data)
-        const message = "recived data from client as " + JSON.stringify(data)
+        const message = "received data from client as " + JSON.stringify(data)
         logger.info(message);
         if ("simulation_data" in data){
             console.log("received simulation data from cleint");

@@ -1,4 +1,4 @@
-const {shapes, calc, SYSTEM, SIMPLECONNECT, CHAIN, STACK, MESH, CONNECTIONS, COPY, bfsTraverse }  = require('./../dev.js');
+const {shapes, calc, SYSTEM, SIMPLECONNECT, CHAIN, STACK, MESH, RUNSIMULATION, COPY, bfsTraverse }  = require('./../dev.js');
 
 shapes._reset();
 
@@ -27,7 +27,6 @@ let control_vol = SYSTEM ({
             U = U + del * dUx + del * dUy
             d2Ux = - d2Uy
             d2Uy = - del * del * U
-            console.log(dUy)
         }})
     ],
 });
@@ -36,7 +35,7 @@ let Sparent = SYSTEM();
 
 let main = () => {
     let N = 30;
-    let M = 100;
+    let M = 30;
     SIMPLECONNECT (Sparent) (MESH(control_vol, N, M));
 }
 

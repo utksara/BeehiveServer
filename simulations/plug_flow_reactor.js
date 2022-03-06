@@ -1,5 +1,5 @@
 const { PATTERN, DebugAny } = require('../lib/beehive.js');
-const {shapes, calc, SYSTEM, PROCESS, SIMPLECONNECT, BICONNECT, CONNECT, CHAIN, STACK, MESH, CONNECTIONS, COPY, bfsTraverse, traverse }  = require('../dev.js');
+const {shapes, calc, SYSTEM, PROCESS, SIMPLECONNECT, BICONNECT, CONNECT, CHAIN, STACK, MESH, RUNSIMULATION, COPY, bfsTraverse, traverse }  = require('../dev.js');
 
 shapes._reset();
 

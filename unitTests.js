@@ -1,7 +1,7 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const {shapes, SYSTEM, SIMPLECONNECT, CHAIN, MESH, CONNECTIONS, COPY, PATTERN, bfsTraverse}  = require('./dev.js');
+const {shapes, SYSTEM, SIMPLECONNECT, CHAIN, MESH, RUNSIMULATION, COPY, PATTERN, bfsTraverse}  = require('./dev.js');
 const {_push_sys, _search_by, run_system} = require('./lib/beehive.js')
 const {register} = require('./lib/sendingData.js');
 const {dfsTraverse} = require('./lib/beehiveUtils')
@@ -64,7 +64,7 @@ describe('Beehive functions', function() {
             let t5 = SYSTEM({NAME:"t5"});
             let t6 = SYSTEM({NAME:"t6"});
 
-            const systemOrder = await CONNECTIONS(()=>{
+            const systemOrder = await RUNSIMULATION(()=>{
                 SIMPLECONNECT (t0) (t1)
                 SIMPLECONNECT (t1) (t2, t3, t4)
                 SIMPLECONNECT (t4) (t5)
