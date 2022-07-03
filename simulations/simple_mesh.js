@@ -35,9 +35,7 @@ let main = () => {
     let N = 15;
 
     SIMPLECONNECT (Sparent) (MESH(control_vol, N, N, xflow = ["Px"], yflow = ["Py"]));
-    bfsTraverse(Sparent, arg =>{
-        console.log(arg.ID)
-    })
+
 }
 
 

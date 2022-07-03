@@ -2,6 +2,7 @@
     "DEBUG" : true,
     "DEBUGPROCESSES" : true,
     "DEBUGSYSTEMS" : false,
-    "DEBUGPARAMS" : false,
-    "simulation" : "simple_chain.js"
+    "DEBUGPARAMS" : true,
+    "simulation" : "livebeehive.js",
+    "DEBUGVISOBEJCT" : false
 }

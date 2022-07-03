@@ -69,11 +69,7 @@ let main = () => {
     SIMPLECONNECT (S1) (S2, S3)
     SIMPLECONNECT (S2) (S3)
     SIMPLECONNECT (Sparent) (PATTERN(S1, {'S2' : 'S3', "S1" : "S2"}, N))
-    // bfsTraverse(Sparent, arg =>{
-    //     console.log(arg.ID)
-    //     // console.log(arg.VISUALIZE[0])
-    //     // console.log("------")
-    // })
+    
 }
 
 

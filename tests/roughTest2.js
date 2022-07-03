@@ -13,7 +13,6 @@ let obj = {
 let N = 10                
 for (var i = 0; i < N; i++){
     execProm(`./cpp_bins/main line center \"${obj.center}\" angle \"${obj.angle}\" length \"${obj.length}\"`).then(
-
-    v=>{console.log(v.stdout)}
+        v=>{console.log(v.stdout)}
     )
 }

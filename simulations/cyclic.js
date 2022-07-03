@@ -1,6 +1,6 @@
+const { CONNECT } = require('../lib/beehive.js');
 const {shapes, calc, SYSTEM, VISOBJECT, SIMPLECONNECT, CHAIN, STACK, MESH, RUNSIMULATION, COPY, bfsTraverse }  = require('./../dev.js');
 
-shapes._reset();
 
 let control_vol = SYSTEM ({
     NAME : "control_vol",
@@ -13,30 +13,18 @@ let control_vol = SYSTEM ({
             maxval : 220,
         })
     ],
-    U : 200,
+    U : 10,
     x : 0,
     y: 0,
+    y_1:0,
+    y1:0,
     dx : 1,
     dy : 1,
-    del : 0.1,
-    dUx : 1,
-    dUy : 1,
-    dUxy : 0,
-    d2Ux : 0,
-    d2Uy : 0,
-    REQUIRE : ["U", "dUx", "dUy", "dUxy", "d2Ux", "d2Uy", "x", "y"],
-    accumulables : ["U"],
+    REQUIRE : ["x", "y"],
+    accumulables : ["x", "y"],
     PROCESSES : [
         (async function (S){with (S){
-            dUx = dUx + del * d2Ux + del * dUxy
-            dUy = dUy + del * dUxy + del * d2Uy
-            U = U + del * dUx + del * dUy
-            d2Ux = - d2Uy
-            d2Uy = - del * del * U
-        }}),
-        (async function (S){with (S){
             x = x + dx;
-            y = y + dy;
         }})
     ],
 });
@@ -44,9 +32,14 @@ let control_vol = SYSTEM ({
 let Sparent = SYSTEM();
 
 let main = () => {
-    let N = 20;
-    let M = 20;
-    SIMPLECONNECT (Sparent) (MESH(control_vol, N, M, xflow = ["x"], yflow = ["y"]));
+    let N = 3;
+
+    let cv = COPY(control_vol)
+    let cv_1 = COPY(control_vol)
+    let cv1 = COPY(control_vol)
+    CONNECT (cv_1, cv).apply ("x", "y") (cv1)
+    CONNECT (cv1, cv_1).apply ("x", "y") (cv)
+    SIMPLECONNECT (Sparent) (CHAIN(cv, N, ["x", "y"]));
 }
 
 module.exports = {

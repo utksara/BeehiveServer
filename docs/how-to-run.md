@@ -6,5 +6,5 @@
 npm install -g forever
 npm install # install npm deps
 
-forever stat server.js
+forever start server.js
 ```

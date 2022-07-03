@@ -242,7 +242,7 @@ describe('Beehive functions', function() {
             // let Schained = CHAIN(control_vol, N);
             // SIMPLECONNECT (Sparent) (STACK(Schained, N, { Pressure : PressureGen(Nshelf) }));
             SIMPLECONNECT (Sparent) (MESH(control_vol, N, N))
-            await run_system(Sparent);
+            await run_system(Sparent.ID);
             assert(1 === 1, true);
 
         });

@@ -34,9 +34,7 @@ let main = () => {
         return Pressurearray;
     }
     SIMPLECONNECT (Sparent) (CHAIN (S1, N));
-    // bfsTraverse(Sparent, arg =>{
-    //     console.log(arg.VISUALIZE[0])
-    // })
+
 }
 
 
