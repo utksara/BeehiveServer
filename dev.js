@@ -1,5 +1,5 @@
 module.exports.calc =require('./lib/calc.js');
-const {SYSTEM, RUNSIMULATION, SIMPLECONNECT, BICONNECT, CHAIN, STACK, MESH, CONNECT, COPY, PATTERN, PROCESS} = require('./lib/beehive.js');
+const {SYSTEM, RUNSIMULATION, SIMPLECONNECT, BICONNECT, CHAIN, STACK, MESH, CONNECT, COPY, PATTERN, PROCESS, CONNECTIONS} = require('./lib/beehive.js');
 const {bfsTraverse, VISOBJECT} = require('./lib/beehiveUtils.js')
 
 module.exports.SYSTEM = SYSTEM;
