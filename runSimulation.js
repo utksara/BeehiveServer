@@ -29,7 +29,7 @@ const run_simulation  = async () => {
     // run = RUNSIMULATION( system.main, system.Sparent)
     let svg_data  = await RUNSIMULATION( simulation_to_run.main, simulation_to_run.Sparent) //, ()=>{});
     
-    console.log("pusheen svg",svg_data)
+    console.log("pusheen svg",svg_data.length)
     fs.writeFileSync('inputoutput/output_data.json', JSON.stringify(svg_data), (err) => {
         if (err) throw err;
     })

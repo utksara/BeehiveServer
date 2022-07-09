@@ -9,7 +9,7 @@ const {loggerCreator} = require('./loggerConfig.js')
 /**
  * Uncomment this for test mode
  */
-// const {run_simulation} = require('./runSimulationTest.js')
+const {run_simulation} = require('./runSimulationTest.js')
 
 const exec_promise =  util.promisify(exec);
 
