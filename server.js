@@ -2,7 +2,7 @@
 const fs = require("fs");
 const util = require("util");
 const exec = require('child_process').exec;
-const {run} = require('./systemdef.js')
+// const {run} = require('./systemdef.js')
 const {reset} = require('./dev.js')
 const {loggerCreator} = require('./loggerConfig.js')
 
@@ -71,11 +71,16 @@ const update_simulation  = async function (websocket) {
     console.log("updating");
 
     reset();
-    await run_simulation();
-    let array_of_items = JSON.parse(fs.readFileSync('inputoutput/output_data.json', 'utf8'));
-    console.log("pusheen vis array length", array_of_items.length);
-    // let array_of_items = await run;
-    await send_data(array_of_items, websocket, "vis")
+    try { 
+        await run_simulation();          
+        let array_of_items = JSON.parse(fs.readFileSync('inputoutput/output_data.json', 'utf8'));
+        console.log("pusheen vis array length", array_of_items.length);
+        await send_data(array_of_items, websocket, "vis") 
+    } catch (error) {
+        console.log(error);   
+        const error_message = "There are errors in the code"
+        await send_data(error_message, websocket, "err")
+    }
 }
 
 const update_text_area = async function(websocket, data) {
