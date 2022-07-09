@@ -9,11 +9,11 @@ let control_vol = SYSTEM ({
             REPRESENTS : "U",
             GEOMETRY : shapes.point,
             POSITION : ["x", "y"],
-            minval : 200,
-            maxval : 220,
+            minval : 100,
+            maxval : 490,
         })
     ],
-    U : 200,
+    U : 100,
     x : 0,
     y: 0,
     dx : 1,
@@ -31,7 +31,7 @@ let control_vol = SYSTEM ({
             dUx = dUx + del * d2Ux + del * dUxy
             dUy = dUy + del * dUxy + del * d2Uy
             U = U + del * dUx + del * dUy
-            d2Ux = - d2Uy
+            d2Ux =  d2Uy
             d2Uy = - del * del * U
         }}),
         (async function (S){with (S){
@@ -44,8 +44,8 @@ let control_vol = SYSTEM ({
 let Sparent = SYSTEM();
 
 let main = () => {
-    let N = 20;
-    let M = 20;
+    let N = 50;
+    let M = 50;
     SIMPLECONNECT (Sparent) (MESH(control_vol, N, M, xflow = ["x"], yflow = ["y"]));
 }
 

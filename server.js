@@ -5,13 +5,21 @@ const util = require("util");
 const exec = require('child_process').exec;
 const {reset} = require('./dev.js')
 const {loggerCreator} = require('./loggerConfig.js')
-const {run_simulation} = require('./runSimulation.js')
+
+/**
+ * Uncomment this for test mode
+ */
+// const {run_simulation} = require('./runSimulationTest.js')
 
 const exec_promise =  util.promisify(exec);
+
+/**
+ * For secure mode 
+ */
 // var privateKey  = fs.readFileSync('certs/key.pem', 'utf8');
 // var certificate = fs.readFileSync('certs/cert.pem', 'utf8');
-
 // var credentials = {key: privateKey, cert: certificate};
+
 const message_prefix = "server data exchange : " 
 const logger = loggerCreator(message_prefix)
 
@@ -63,7 +71,7 @@ const run_simulation_async = async () => {
     //     console.log(`stdout: ${stdout}`);
     //     console.error(`stderr: ${stderr}`);
     //   });
-    
+    console.log("pusheen runsim")
     await exec_promise(`node ${process.cwd()}/runSimulation.js`);
 }
 

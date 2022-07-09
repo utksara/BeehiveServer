@@ -1,6 +1,6 @@
 {
-    "DEBUG" : true,
-    "DEBUGPROCESSES" : true,
+    "DEBUG" : false,
+    "DEBUGPROCESSES" : false,
     "DEBUGSYSTEMS" : false,
     "DEBUGPARAMS" : true,
     "simulation" : "livebeehive.js",
