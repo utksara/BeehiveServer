@@ -10,7 +10,5 @@ const simulation_file_name = require('./config.json').simulation;
 // const plug_flow_reactor = require('./simulations/plug_flow_reactor.js')
 // const simulation_to_run = require(`./simulations/${simulation_file_name}`);
 const livebeehive = require('./simulations/livebeehive.js');
-
-reset();
 const system = livebeehive;
 module.exports.run = CONNECTIONS( system.main, system.Sparent);
