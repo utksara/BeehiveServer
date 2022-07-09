@@ -18,6 +18,13 @@ module.exports.VISOBJECT = VISOBJECT;
 
 module.exports.shapes = require('./lib/shapes.js');
 const {_reset} = require('./lib/shapes.js');
+
+const beehiveUtils = require('./lib/beehiveUtils.js');
 module.exports.reset = ()=>{
+    beehiveUtils.list_of_objs = [];
+    beehiveUtils.vis_objs = [];
+    beehiveUtils.sys_by_id = {};
+    beehiveUtils.edge_by_id = {};
+    beehiveUtils.global_index = 0;
     _reset();
 }
