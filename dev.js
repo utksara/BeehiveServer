@@ -26,5 +26,6 @@ module.exports.reset = ()=>{
     beehiveUtils.sys_by_id = {};
     beehiveUtils.edge_by_id = {};
     beehiveUtils.global_index = 0;
+    beehiveUtils.execution_order = [];
     _reset();
 }
