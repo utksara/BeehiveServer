@@ -1,7 +1,8 @@
 {
-    "DEBUG" : true,
-    "DEBUGPROCESSES" : false,
+    "DEBUG" : false,
+    "DEBUGPROCESSES" : true,
     "DEBUGSYSTEMS" : false,
     "DEBUGPARAMS" : false,
-    "simulation" : "simple_chain.js"
+    "simulation" : "simple_chain.js",
+    "ADD_TRACER": true
 }
