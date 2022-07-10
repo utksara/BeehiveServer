@@ -15,12 +15,16 @@ module.exports.bfsTraverse = bfsTraverse;
 module.exports.CONNECT = CONNECT;
 module.exports.PROCESS = PROCESS;
 module.exports.VISOBJECT = VISOBJECT;
+module.exports.CONNECTIONS = CONNECTIONS;
+
 
 module.exports.shapes = require('./lib/shapes.js');
 const {_reset} = require('./lib/shapes.js');
 
 const beehiveUtils = require('./lib/beehiveUtils.js');
 module.exports.reset = ()=>{
+
+    console.log("pusheen reset called")
     beehiveUtils.list_of_objs = [];
     beehiveUtils.vis_objs = [];
     beehiveUtils.sys_by_id = {};

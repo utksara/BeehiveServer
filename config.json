@@ -1,9 +1,9 @@
 {
-    "DEBUG" : true,
+    "DEBUG" : false,
     "DEBUGPROCESSES" : false,
     "DEBUGSYSTEMS" : false,
     "DEBUGPARAMS" : true,
     "simulation" : "livebeehive.js",
     "DEBUGVISOBEJCT" : false,
-    "ADDTRACTER" : true
+    "ADDTRACER" : true
 }

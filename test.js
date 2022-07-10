@@ -77,6 +77,8 @@ describe('Beehive functions', function() {
 
             const systemOrder = execution_order;
 
+            console.log(systemOrder)
+
             const systemIDOrder = _.map(systemOrder, function (x) {
                 return x.NAME;
             });
