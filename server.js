@@ -1,4 +1,5 @@
 
+const { out } = require("forever");
 const fs = require("fs");
 const util = require("util");
 const exec = require('child_process').exec;
@@ -54,6 +55,7 @@ startup_scripts();
 
 const run_simulation = async () => {
     let output = (await exec_promise(`node ${process.cwd()}/runSimulation.js`)).stdout;
+    console.log(output)
 }
 
 const send_data = async (json_obj, ws, key_string) => {
@@ -141,7 +143,6 @@ wss.on("connection" , async ws => {
     initiate_simulation(ws);
     ws.onmessage =(async blobdata => {
         const data = JSON.parse(blobdata.data);
-        console.log(data)
         const message = "recived data from client as " + JSON.stringify(data)
         logger.info(message);
         if ("simulation_data" in data){

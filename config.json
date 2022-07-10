@@ -1,8 +1,8 @@
 {
-    "DEBUG" : false,
-    "DEBUGPROCESSES" : true,
+    "DEBUG" : true,
+    "DEBUGPROCESSES" : false,
     "DEBUGSYSTEMS" : false,
-    "DEBUGPARAMS" : false,
-    "simulation" : "simple_chain.js",
+    "DEBUGPARAMS" : true,
+    "simulation" : "livebeehive.js",
     "ADD_TRACER": true
 }
