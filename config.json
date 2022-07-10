@@ -6,5 +6,6 @@
     "simulation" : "livebeehive.js",
     "DEBUGVISOBEJCT" : false,
     "ADDTRACER" : true,
-    "LOGGING" : true
+    "LOGGING" : true,
+    "ADD_TRACER": true
 }

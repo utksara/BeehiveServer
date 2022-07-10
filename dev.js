@@ -1,6 +1,7 @@
 module.exports.calc =require('./lib/calc.js');
 const {SYSTEM, RUNSIMULATION, SIMPLECONNECT, BICONNECT, CHAIN, STACK, MESH, CONNECT, COPY, PATTERN, PROCESS, CONNECTIONS} = require('./lib/beehive.js');
 const {bfsTraverse, VISOBJECT, createlog} = require('./lib/beehiveUtils.js')
+const beehiveUtils = require('./lib/beehiveUtils.js')
 
 module.exports.SYSTEM = SYSTEM;
 module.exports.RUNSIMULATION = RUNSIMULATION;
@@ -32,4 +33,10 @@ module.exports.reset = ()=>{
     beehiveUtils.global_index = 0;
     beehiveUtils.execution_order = [];
     _reset();
+    beehiveUtils.list_of_objs = [];
+    beehiveUtils.vis_objs = [];
+    beehiveUtils.sys_by_id = {};
+    beehiveUtils.edge_by_id = {};
+    beehiveUtils.execution_order = [];
+    beehiveUtils.global_id = 0;
 }

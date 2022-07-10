@@ -4,10 +4,10 @@ const util = require("util");
 const exec = require('child_process').exec;
 const {reset} = require('./dev.js')
 const {loggerCreator} = require('./loggerConfig.js')
+
 // var privateKey  = fs.readFileSync('certs/key.pem', 'utf8');
 // var certificate = fs.readFileSync('certs/cert.pem', 'utf8');
 
-// var credentials = {key: privateKey, cert: certificate};
 const message_prefix = "server data exchange : " 
 const logger = loggerCreator(message_prefix)
 
@@ -24,7 +24,6 @@ const plug_flow_reactor = require('./simulations/plug_flow_reactor.js')
 const online_simulation = require(`./simulations/${simulation_file_name}`);
 const simulation_to_run = online_simulation;
 // const simulation_to_run = simple_laplace;
-
 
 const run_simulation  = async () => {
     let svg_data  = await RUNSIMULATION( simulation_to_run) //, ()=>{});
