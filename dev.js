@@ -25,7 +25,6 @@ const {_reset} = require('./lib/shapes.js');
 const beehiveUtils = require('./lib/beehiveUtils.js');
 module.exports.reset = ()=>{
 
-    console.log("pusheen reset called")
     beehiveUtils.list_of_objs = [];
     beehiveUtils.vis_objs = [];
     beehiveUtils.sys_by_id = {};

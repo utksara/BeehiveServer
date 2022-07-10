@@ -28,8 +28,6 @@ const simulation_to_run = simple_laplace;
 
 const run_simulation  = async () => {
     let svg_data  = await RUNSIMULATION( simulation_to_run) //, ()=>{});
-    
-    console.log("pusheen svg",svg_data.length)
     fs.writeFileSync('inputoutput/output_data.json', JSON.stringify(svg_data), (err) => {
         if (err) throw err;
     })

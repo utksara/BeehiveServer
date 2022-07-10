@@ -71,7 +71,6 @@ const run_simulation_async = async () => {
     //     console.log(`stdout: ${stdout}`);
     //     console.error(`stderr: ${stderr}`);
     //   });
-    console.log("pusheen runsim")
     await exec_promise(`node ${process.cwd()}/runSimulation.js`);
 }
 
