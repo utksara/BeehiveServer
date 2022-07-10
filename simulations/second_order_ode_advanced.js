@@ -1,5 +1,5 @@
 const { PATTERN, DebugAny } = require('../lib/beehive.js');
-const {shapes, calc, SYSTEM, SIMPLECONNECT, CONNECT, CHAIN, STACK, MESH, CONNECTIONS, COPY, bfsTraverse, traverse }  = require('../dev.js');
+const {shapes, calc, SYSTEM, SIMPLECONNECT, CONNECT, CHAIN, STACK, MESH, RUNSIMULATION, COPY, bfsTraverse, traverse }  = require('../dev.js');
 
 shapes._reset();
 
@@ -68,9 +68,7 @@ let main = () => {
     CONNECT (S1) ("P_1") (S3)
     CONNECT (S2) ("P0") (S3)
     SIMPLECONNECT (Sparent) (PATTERN(S1, {'S1' : 'S2', 'S2' : 'S3'}, N))
-    bfsTraverse(Sparent, arg =>{
-        console.log(arg.ID)
-    })
+
 }
 
 

@@ -1,4 +1,4 @@
-const {shapes, calc, SYSTEM, SIMPLECONNECT, CHAIN, STACK, MESH, CONNECTIONS, COPY, bfsTraverse }  = require('./../dev.js');
+const {shapes, calc, SYSTEM, SIMPLECONNECT, CHAIN, STACK, MESH, RUNSIMULATION, COPY, bfsTraverse }  = require('./../dev.js');
 
 shapes._reset();
 
@@ -34,9 +34,7 @@ let main = () => {
         return Pressurearray;
     }
     SIMPLECONNECT (Sparent) (CHAIN (S1, N));
-    // bfsTraverse(Sparent, arg =>{
-    //     console.log(arg.VISUALIZE[0])
-    // })
+
 }
 
 

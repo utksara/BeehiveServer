@@ -4,5 +4,8 @@
     "DEBUGSYSTEMS" : false,
     "DEBUGPARAMS" : true,
     "simulation" : "livebeehive.js",
+    "DEBUGVISOBEJCT" : false,
+    "ADDTRACER" : true,
+    "LOGGING" : true,
     "ADD_TRACER": true
 }

@@ -1,7 +1,7 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const {shapes, SYSTEM, SIMPLECONNECT, CHAIN, MESH, CONNECTIONS, COPY, PATTERN, bfsTraverse}  = require('./dev.js');
+const {shapes, SYSTEM, SIMPLECONNECT, CHAIN, MESH, RUNSIMULATION, COPY, PATTERN, bfsTraverse}  = require('./dev.js');
 const {_push_sys, _search_by, run_system} = require('./lib/beehive.js')
 const {register} = require('./lib/sendingData.js');
 const {dfsTraverse} = require('./lib/beehiveUtils')
@@ -64,13 +64,20 @@ describe('Beehive functions', function() {
             let t5 = SYSTEM({NAME:"t5"});
             let t6 = SYSTEM({NAME:"t6"});
 
-            const systemOrder = await CONNECTIONS(()=>{
-                SIMPLECONNECT (t0) (t1)
-                SIMPLECONNECT (t1) (t2, t3, t4)
-                SIMPLECONNECT (t4) (t5)
-                SIMPLECONNECT (t4) (t3)
+            simulation_to_run = {
+                main: ()=>{
+                    SIMPLECONNECT (t0) (t1)
+                    SIMPLECONNECT (t1) (t2, t3, t4)
+                    SIMPLECONNECT (t4) (t5)
+                    SIMPLECONNECT (t4) (t3)
+    
+                },
 
-            }, t0);
+                Sparent: t0
+
+            }
+
+            const systemOrder = await RUNSIMULATION(simulation_to_run);
             const systemIDOrder = _.map(systemOrder, function (x) {
                 return x.NAME;
             });
@@ -212,12 +219,6 @@ describe('Beehive functions', function() {
         it('checks runtime', async function() {
             let control_vol = SYSTEM ({
                 NAME : "control_vol",
-                VISUALIZE : [
-                    {
-                        REPRESENTS : "Pressure",
-                        GEOMETRY : shapes.point
-                    }
-                ],
                 Pressure : 200,
                 REQUIRE : ["Pressure"],    
                 PROCESSES : [
@@ -239,10 +240,19 @@ describe('Beehive functions', function() {
                 }
                 return Pressurearray;
             }
+             
             // let Schained = CHAIN(control_vol, N);
             // SIMPLECONNECT (Sparent) (STACK(Schained, N, { Pressure : PressureGen(Nshelf) }));
-            SIMPLECONNECT (Sparent) (MESH(control_vol, N, N))
-            await run_system(Sparent);
+
+
+            simulation_to_run = {
+                main : () => {
+                    SIMPLECONNECT (Sparent) (MESH(control_vol, N, N))
+                },
+                Sparent : Sparent
+            }
+
+            await RUNSIMULATION(simulation_to_run);
             assert(1 === 1, true);
 
         });

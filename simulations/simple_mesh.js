@@ -1,4 +1,4 @@
-const {shapes, calc, SYSTEM, SIMPLECONNECT, CONNECT, CHAIN, STACK, MESH, CONNECTIONS, COPY, bfsTraverse }  = require('./../dev.js');
+const {shapes, calc, SYSTEM, SIMPLECONNECT, CONNECT, CHAIN, STACK, MESH, RUNSIMULATION, COPY, bfsTraverse }  = require('./../dev.js');
 
 shapes._reset();
 
@@ -35,9 +35,7 @@ let main = () => {
     let N = 15;
 
     SIMPLECONNECT (Sparent) (MESH(control_vol, N, N, xflow = ["Px"], yflow = ["Py"]));
-    bfsTraverse(Sparent, arg =>{
-        console.log(arg.ID)
-    })
+
 }
 
 

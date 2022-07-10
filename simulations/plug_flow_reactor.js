@@ -1,5 +1,5 @@
 const { PATTERN, DebugAny } = require('../lib/beehive.js');
-const {shapes, calc, SYSTEM, PROCESS, SIMPLECONNECT, BICONNECT, CONNECT, CHAIN, STACK, MESH, CONNECTIONS, COPY, bfsTraverse, traverse }  = require('../dev.js');
+const {shapes, calc, SYSTEM, PROCESS, SIMPLECONNECT, BICONNECT, CONNECT, CHAIN, STACK, MESH, RUNSIMULATION, COPY, bfsTraverse, traverse }  = require('../dev.js');
 
 shapes._reset();
 
@@ -27,13 +27,8 @@ let calculate_concentration = (async function (S){with (S){
     // console.log((reaction_rate - D * del2Cz - D * del2Cr - U * D * delCr / r)*dz/U)
     // C = Cz + (-reaction_rate - D * del2Cz - D * del2Cr - D * delCr / r)*dz/U
     C = Cz + (-reaction_rate - D * Cr)*dz/U
-    
-    // console.log("reaction_rate ", reaction_rate)
-    // console.log("D * del2Cz ", D * del2Cz)
-    // console.log("D * del2Cr ", D * del2Cr)
-    // console.log("D * delCr / r ",D * delCr / r)
+
     // delCr_new = (C - Cr)/dr
-    console.log(Cr)
     // del2Cr = (delCr_new - delCr)/dr
 
     // delCz_new = (C - Cz)/dz
@@ -96,9 +91,6 @@ let main = () => {
     let width = 20, length = 100;
 
     SIMPLECONNECT (Sparent)(MESH(S1, width, length, ["Cz", "z" , "delCz", "del2Cz"], ["Cr", "r", "delCr", "del2Cr"]))
-    // bfsTraverse(Sparent, arg =>{
-    //     console.log(arg.ID, "-->", arg.REQUIRE)
-    // })
 }
 
 
