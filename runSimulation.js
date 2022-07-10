@@ -22,8 +22,8 @@ const cellmech = require('./simulations/cellmech.js')
 const basic_curve = require(`./simulations/basic_curve.js`);
 const plug_flow_reactor = require('./simulations/plug_flow_reactor.js')
 const online_simulation = require(`./simulations/${simulation_file_name}`);
-// const simulation_to_run = online_simulation;
-const simulation_to_run = simple_laplace;
+const simulation_to_run = online_simulation;
+// const simulation_to_run = simple_laplace;
 
 
 const run_simulation  = async () => {
