@@ -44,8 +44,8 @@ let control_vol = SYSTEM ({
 let Sparent = SYSTEM();
 
 let main = () => {
-    let N = 100;
-    let M = 30;
+    let N = 30;
+    let M = 100;
     SIMPLECONNECT (Sparent) (MESH(control_vol, N, M, xflow = ["x"], yflow = ["y"]));
 }
 
