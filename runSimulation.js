@@ -22,14 +22,12 @@ const cellmech = require('./simulations/cellmech.js')
 const basic_curve = require(`./simulations/basic_curve.js`);
 const plug_flow_reactor = require('./simulations/plug_flow_reactor.js')
 const online_simulation = require(`./simulations/${simulation_file_name}`);
-// const simulation_to_run = online_simulation;
-const simulation_to_run = simple_laplace;
+const simulation_to_run = online_simulation;
+// const simulation_to_run = simple_laplace;
 
 
 const run_simulation  = async () => {
-    reset();
-    // run = RUNSIMULATION( system.main, system.Sparent)
-    let svg_data  = await RUNSIMULATION( simulation_to_run.main, simulation_to_run.Sparent) //, ()=>{});
+    let svg_data  = await RUNSIMULATION( simulation_to_run) //, ()=>{});
     
     console.log("pusheen svg",svg_data.length)
     fs.writeFileSync('inputoutput/output_data.json', JSON.stringify(svg_data), (err) => {

@@ -5,11 +5,10 @@ const util = require("util");
 const exec = require('child_process').exec;
 const {reset} = require('./dev.js')
 const {loggerCreator} = require('./loggerConfig.js')
-
 /**
  * Uncomment this for test mode
  */
-const {run_simulation} = require('./runSimulationTest.js')
+// const {run_simulation} = require('./runSimulationTest.js')
 
 const exec_promise =  util.promisify(exec);
 
@@ -87,13 +86,19 @@ const send_data = async (json_obj, ws, key_string) => {
 
 const update_simulation  = async function (websocket) {
     logger.info("updated simulation");
-    console.log("updating simulation");
-    reset(); 
-    await run_simulation_async()
-    let array_of_items = JSON.parse(fs.readFileSync('inputoutput/output_data.json', 'utf8'));
-    console.log("pusheen vis array length", array_of_items.length);
-    // let array_of_items = await run;
-    await send_data(array_of_items, websocket, "vis")
+    console.log("updating");
+
+    reset();
+    try { 
+        await run_simulation_async();          
+        let array_of_items = JSON.parse(fs.readFileSync('inputoutput/output_data.json', 'utf8'));
+        console.log("pusheen vis array length", array_of_items.length);
+        await send_data(array_of_items, websocket, "vis") 
+    } catch (error) {
+        console.log(error);   
+        const error_message = "There are errors in the code"
+        await send_data(error_message, websocket, "err")
+    }
 }
 
 const update_text_area = async function(websocket, data) {

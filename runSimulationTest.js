@@ -22,7 +22,7 @@ const simulation_to_run = simple_laplace;
 
 const run_simulation  = async () => {
     reset();
-    let svg_data  = await RUNSIMULATION( simulation_to_run.main, simulation_to_run.Sparent);
+    let svg_data  = await RUNSIMULATION( simulation_to_run);
     
     console.log("pusheen svg", svg_data.length)
 

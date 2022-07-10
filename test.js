@@ -1,9 +1,10 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const {shapes,reset, SYSTEM, SIMPLECONNECT, CHAIN, MESH, CONNECTIONS, COPY, PATTERN, bfsTraverse}  = require('./dev.js');
-const {_push_sys, _search_by, run_system} = require('./lib/beehive.js')
+const {shapes,reset, SYSTEM, SIMPLECONNECT, CHAIN, MESH, CONNECTIONS, COPY, PATTERN, bfsTraverse, VISOBJECT}  = require('./dev.js');
+const {_push_sys, _search_by, run_system, RUNSIMULATION} = require('./lib/beehive.js')
 const {register} = require('./lib/sendingData.js');
+const {register_3} = require('./lib/visualization.js');
 const {dfsTraverse, execution_order, sys_by_id} = require('./lib/beehiveUtils');
 
 describe('Beehive functions', function() {
@@ -181,37 +182,45 @@ describe('Beehive functions', function() {
                 NAME : "S",
                 Quantity1 : 200,
                 Quantity2 : 0,
+                x : 0,
+                y :0,
                 VISUALIZE : [
-                    {
+                    VISOBJECT({
                         REPRESENTS : "Quantity1",
-                        GEOMETRY : shapes.point
-                    },
-                    {
+                        GEOMETRY : shapes.point,
+                        POSITION : ["x", "y"],
+                        minval : 200,
+                        maxval : 220,
+                    }),
+                    VISOBJECT({
                         REPRESENTS : "Quantity2",
-                        GEOMETRY : shapes.point
-                    }
+                        GEOMETRY : shapes.point,
+                        POSITION : ["x", "y"],
+                        minval : 0,
+                        maxval : 10,
+                    })
                 ],
             });
             const expectedJsObject = 
             [
                 {
-                  id: 'shape00000',
-                  svg: 'M 100,100 100,101Z',
-                  fill: 'none',
-                  stroke: 'rgb(255, 0, 0)',
-                  width: 1
+                  represent: 'Quantity1',
+                  shape_type: 'point',
+                  center: '0,0',
+                  quantity: '200',
+                  length: '1'
                 },
                 {
-                  id: 'shape00000',
-                  svg: 'M 100,100 100,101Z',
-                  fill: 'none',
-                  stroke: 'rgb(0, 0, 255)',
-                  width: 1
+                  represent: 'Quantity2',
+                  shape_type: 'point',
+                  center: '0,0',
+                  quantity: '0',
+                  length: '1'
                 }
               ];
               
             let arr = [];
-            await register (arr, S);
+            register_3 (S, arr);
             console.log(arr);
             console.log(expectedJsObject);
             assert(JSON.stringify(arr) === JSON.stringify(expectedJsObject), true);
@@ -223,13 +232,18 @@ describe('Beehive functions', function() {
             reset()
             let control_vol = SYSTEM ({
                 NAME : "control_vol",
-                VISUALIZE : [
-                    {
-                        REPRESENTS : "Pressure",
-                        GEOMETRY : shapes.point
-                    }
-                ],
                 Pressure : 200,
+                x : 0,
+                y :0,
+                VISUALIZE : [
+                    VISOBJECT({
+                        REPRESENTS : "Pressure",
+                        GEOMETRY : shapes.point,
+                        POSITION : ["x", "y"],
+                        minval : 0,
+                        maxval : 10,
+                    })
+                ],
                 REQUIRE : ["Pressure"],    
                 PROCESSES : [
                     (async function (S){with (S){
@@ -253,7 +267,13 @@ describe('Beehive functions', function() {
             // let Schained = CHAIN(control_vol, N);
             // SIMPLECONNECT (Sparent) (STACK(Schained, N, { Pressure : PressureGen(Nshelf) }));
             SIMPLECONNECT (Sparent) (MESH(control_vol, N, N))
-            await run_system(Sparent);
+
+            simulation_to_run = {
+                main : ()=>{},
+                Sparent :Sparent
+            }
+            await RUNSIMULATION(simulation_to_run);
+            
             assert(1 === 1, true);
 
         });
