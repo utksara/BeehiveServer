@@ -27,7 +27,6 @@ let control_vol = SYSTEM ({
             U = U + del * dUx + del * dUy
             d2Ux = - d2Uy
             d2Uy = - del * del * U
-            console.log(dUy)
         }})
     ],
 });
