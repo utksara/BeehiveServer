@@ -8,5 +8,6 @@ CellMechanicsReportUtk.docx
 logs/
 inputoutput/
 cpp_bins/
+saved_binaries/
 nohup.out
 # simulations/livebeehive.js

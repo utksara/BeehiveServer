@@ -3,7 +3,6 @@ const _ = require('lodash');
 
 const {shapes, SYSTEM, SIMPLECONNECT, CHAIN, MESH, RUNSIMULATION, COPY, PATTERN, bfsTraverse}  = require('./dev.js');
 const {_push_sys, _search_by, run_system} = require('./lib/beehive.js')
-const {register} = require('./lib/sendingData.js');
 const {dfsTraverse} = require('./lib/beehiveUtils')
 
 describe('Beehive functions', function() {
@@ -172,48 +171,6 @@ describe('Beehive functions', function() {
     });
 
 });
-
-describe('Beehive functions', function() {
-    describe('register', function() {
-        it('checks registeration', async function() {
-            let S = SYSTEM({
-                NAME : "S",
-                Quantity1 : 200,
-                Quantity2 : 0,
-                VISUALIZE : [
-                    {
-                        REPRESENTS : "Quantity1",
-                        GEOMETRY : shapes.point
-                    },
-                    {
-                        REPRESENTS : "Quantity2",
-                        GEOMETRY : shapes.point
-                    }
-                ],
-            });
-            const expectedJsObject = [
-                {
-                    "id" : "shape0000",
-                    "svg" : 'M 99.9996,99.5 100,100.5 Z',
-                    "fill" : 'none',
-                    "stroke" : 'rgb(255, 0, 0)',
-                    "width" : 1
-                },
-                {
-                    "id" : "shape0000",
-                    "svg" : 'M 99.9996,99.5 100,100.5 Z',
-                    "fill" : 'none',
-                    "stroke" : 'rgb(0, 0, 255)',
-                    "width" : 1
-                }
-            ];
-            let arr = [];
-            await register (arr,S);
-            console.log(arr);
-            console.log(expectedJsObject);
-            assert(JSON.stringify(arr) === JSON.stringify(expectedJsObject), true);
-        }); 
-    });
 
     describe('runtime', function() {
         it('checks runtime', async function() {

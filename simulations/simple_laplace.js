@@ -1,4 +1,4 @@
-const {shapes, calc, SYSTEM, VISOBJECT, SIMPLECONNECT, CHAIN, STACK, MESH, RUNSIMULATION, COPY, bfsTraverse }  = require('./../dev.js');
+const {condition, shapes, calc, SYSTEM, VISOBJECT, SIMPLECONNECT, CHAIN, STACK, MESH, RUNSIMULATION, COPY, bfsTraverse }  = require('./../dev.js');
 
 shapes._reset();
 
@@ -6,11 +6,11 @@ let control_vol = SYSTEM ({
     NAME : "control_vol",
     VISUALIZE : [
         VISOBJECT({
-            REPRESENTS : "U",
-            GEOMETRY : shapes.point,
+            REPRESENTS : condition("U > 201"),
+            // GEOMETRY : shapes.point,
             POSITION : ["x", "y"],
-            minval : 200,
-            maxval : 220,
+            // minval : 200,
+            // maxval : 220,
         })
     ],
     U : 200,
@@ -44,8 +44,8 @@ let control_vol = SYSTEM ({
 let Sparent = SYSTEM();
 
 let main = () => {
-    let N = 10;
-    let M = 30;
+    let N = 1;
+    let M = 10;
     SIMPLECONNECT (Sparent) (MESH(control_vol, N, M, 
                                 xflow = ["x", "dUy", "d2Uy", "dUx", "d2Ux", "dUxy", "U"], 
                                 yflow = ["y", "dUy", "d2Uy", "dUx", "d2Ux", "dUxy", "U"]));

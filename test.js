@@ -3,8 +3,7 @@ const _ = require('lodash');
 
 const {shapes,reset, SYSTEM, SIMPLECONNECT, CHAIN, MESH, CONNECTIONS, COPY, PATTERN, bfsTraverse, VISOBJECT}  = require('./dev.js');
 const {_push_sys, _search_by, run_system, RUNSIMULATION} = require('./lib/beehive.js')
-const {register} = require('./lib/sendingData.js');
-const {register_3} = require('./lib/visualization.js');
+const {collect} = require('./lib/visualization.js');
 const {dfsTraverse, execution_order, sys_by_id} = require('./lib/beehiveUtils');
 
 describe('Beehive functions', function() {
@@ -218,7 +217,7 @@ describe('Beehive functions', function() {
               ];
               
             let arr = [];
-            register_3 (S, arr);
+            collect (S, arr);
             console.log(arr);
             console.log(expectedJsObject);
             assert(JSON.stringify(arr) === JSON.stringify(expectedJsObject), true);
