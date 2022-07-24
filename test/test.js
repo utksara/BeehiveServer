@@ -1,13 +1,16 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const {shapes, SYSTEM, SIMPLECONNECT, CHAIN, MESH, RUNSIMULATION, COPY, PATTERN, bfsTraverse}  = require('./dev.js');
-const {_push_sys, _search_by, run_system} = require('./lib/beehive.js')
-const {dfsTraverse} = require('./lib/beehiveUtils')
+const {shapes,reset, SYSTEM, SIMPLECONNECT, CHAIN, MESH, CONNECTIONS, COPY, PATTERN, bfsTraverse, VISOBJECT}  = require('../dev.js');
+const {_push_sys, _search_by, run_system, RUNSIMULATION} = require('../lib/beehive.js')
+const {collect} = require('../lib/visualization.js');
+const {dfsTraverse, execution_order, } = require('../lib/beehiveUtils');
+const {sys_by_id} = require('../lib/core/globalParameters.js')
 
 describe('Beehive functions', function() {
     describe('copy system', function() {
         it('should create clone of a system', function() {
+            reset()
             let s1 = SYSTEM({
                 "property" : 1,
                 NAME : "s1",
@@ -22,6 +25,7 @@ describe('Beehive functions', function() {
 
     describe('chain only', function() {
         it('check order of execution for SINGLE ELEMENT CHAINS', async function() {
+            reset()
             let s1 = SYSTEM({NAME:"s1"});
             let s0 = CHAIN(s1, 4);
 
@@ -35,6 +39,7 @@ describe('Beehive functions', function() {
 
     describe('chain shelves', function() {
         it('check order of execution for CHAINED SHELVES', async function() {
+            reset()
             let s0 = SYSTEM({NAME:"s0"});
             let s1 = SYSTEM({NAME:"s1"});
             let s2 = SYSTEM({NAME:"s2"});
@@ -45,7 +50,7 @@ describe('Beehive functions', function() {
             // SIMPLECONNECT (s4) (s5, s6)
 
             let systemOrder = dfsTraverse(s0, "NAME")
-            let orderShouldBe = ["s0", "s1", "s2", "s3", "s1", "s2", "s3", "s1", "s2", "s3"];
+            let orderShouldBe = ["s0", "s1", "s2", "s1", "s2", "s1", "s2", "s3", "s3", "s3"];
             console.log(" orderShouldBe ", orderShouldBe);
             console.log(" systemOrder ", systemOrder);
             assert(JSON.stringify(orderShouldBe) === JSON.stringify(systemOrder), true);         
@@ -54,7 +59,7 @@ describe('Beehive functions', function() {
 
     describe('complex network', function() {
         it('check order of execution for a complex network', async function() {
-
+            reset()
             let t0 = SYSTEM({NAME:"t0"});
             let t1 = SYSTEM({NAME:"t1"});
             let t2 = SYSTEM({NAME:"t2"});
@@ -63,20 +68,16 @@ describe('Beehive functions', function() {
             let t5 = SYSTEM({NAME:"t5"});
             let t6 = SYSTEM({NAME:"t6"});
 
-            simulation_to_run = {
-                main: ()=>{
-                    SIMPLECONNECT (t0) (t1)
-                    SIMPLECONNECT (t1) (t2, t3, t4)
-                    SIMPLECONNECT (t4) (t5)
-                    SIMPLECONNECT (t4) (t3)
-    
-                },
+            await CONNECTIONS(()=>{
+                SIMPLECONNECT (t0) (t1)
+                SIMPLECONNECT (t1) (t2, t3, t4)
+                SIMPLECONNECT (t4) (t5)
+                SIMPLECONNECT (t4) (t3)
 
-                Sparent: t0
+            }, t0);
 
-            }
-
-            const systemOrder = await RUNSIMULATION(simulation_to_run);
+            const systemOrder = execution_order;
+            console.log(systemOrder)
             const systemIDOrder = _.map(systemOrder, function (x) {
                 return x.NAME;
             });
@@ -89,6 +90,7 @@ describe('Beehive functions', function() {
 
     describe('pushsys', function() {
         it('push system forward', async function() {
+            reset()
             let s0 = SYSTEM({NAME:"s0"});
             let s1 = SYSTEM({NAME:"s1"});
             let s2 = SYSTEM({NAME:"s2"});
@@ -98,13 +100,7 @@ describe('Beehive functions', function() {
             _push_sys ('forward')(s3) (s0);
 
             let traversal = dfsTraverse(s0, "NAME");
-            let orderShouldBe = ["s0", "s1", "s3", "s2", "s3"];
-            console.log(orderShouldBe);
-            console.log(traversal)
-            assert(JSON.stringify(orderShouldBe) === JSON.stringify(traversal), true);
-
-            traversal = bfsTraverse(s0);
-            orderShouldBe = ["s1", "s2", "s3", "s3"];
+            let orderShouldBe = ["s0", "s1", "s3", "s2"];
             console.log(orderShouldBe);
             console.log(traversal)
             assert(JSON.stringify(orderShouldBe) === JSON.stringify(traversal), true);
@@ -113,6 +109,7 @@ describe('Beehive functions', function() {
 
     describe('endpoints', function() {
         it('find endpoint', async function() {
+            reset()
             let s0 = SYSTEM({NAME:"s0"});
             let s1 = SYSTEM({NAME:"s1"});
             let s2 = SYSTEM({NAME:"s2"});
@@ -122,7 +119,7 @@ describe('Beehive functions', function() {
             SIMPLECONNECT (s0) (s1, s2);
 
             let endpoints = _.reduce(s0.endpoints, function (result, value) {
-                result.push(value.NAME)
+                result.push(sys_by_id[value].NAME)
                 return result
             }, []);
 
@@ -134,7 +131,7 @@ describe('Beehive functions', function() {
             _push_sys ('forward')(s3) (s0);
             
             endpoints = _.reduce(s0.endpoints, function (result, value) {
-                result.push(value.NAME)
+                result.push(sys_by_id[value].NAME)
                 return result
             }, []);
 
@@ -146,7 +143,7 @@ describe('Beehive functions', function() {
             _push_sys ('forward') (s4) (s0)
 
             endpoints = _.reduce(s0.endpoints, function (result, value) {
-                result.push(value.NAME)
+                result.push(sys_by_id[value].NAME)
                 return result
             }, []);
 
@@ -158,8 +155,11 @@ describe('Beehive functions', function() {
     });
 
     describe('mesh', function() {
-        it('craetes mesh', async function() {
+        it('creates mesh', async function() {
+            reset()
             let s0 = SYSTEM({NAME:"s0"});
+
+            console.log(s0)
             let smesh = MESH(s0, 3, 2);
             const dfsTraverse_should_be = [ '00001', '00002', '00003', '00005', '00007', '00004', '00006' ];
             const dfsTraverse_is = dfsTraverse(smesh);
@@ -172,11 +172,76 @@ describe('Beehive functions', function() {
 
 });
 
+describe('Beehive functions', function() {
+    describe('register', function() {
+        it('checks registeration', async function() {
+            reset()
+            let S = SYSTEM({
+                NAME : "S",
+                Quantity1 : 200,
+                Quantity2 : 0,
+                x : 0,
+                y :0,
+                VISUALIZE : [
+                    VISOBJECT({
+                        REPRESENTS : "Quantity1",
+                        GEOMETRY : shapes.point,
+                        POSITION : ["x", "y"],
+                        minval : 200,
+                        maxval : 220,
+                    }),
+                    VISOBJECT({
+                        REPRESENTS : "Quantity2",
+                        GEOMETRY : shapes.point,
+                        POSITION : ["x", "y"],
+                        minval : 0,
+                        maxval : 10,
+                    })
+                ],
+            });
+            const expectedJsObject = 
+            [
+                {
+                  represent: 'Quantity1',
+                  shape_type: 'point',
+                  center: '0,0',
+                  quantity: '200',
+                  length: '1'
+                },
+                {
+                  represent: 'Quantity2',
+                  shape_type: 'point',
+                  center: '0,0',
+                  quantity: '0',
+                  length: '1'
+                }
+              ];
+              
+            let arr = [];
+            collect (S, arr);
+            console.log(arr);
+            console.log(expectedJsObject);
+            assert(JSON.stringify(arr) === JSON.stringify(expectedJsObject), true);
+        }); 
+    });
+
     describe('runtime', function() {
         it('checks runtime', async function() {
+            reset()
             let control_vol = SYSTEM ({
                 NAME : "control_vol",
                 Pressure : 200,
+                x : 0,
+                y :0,
+                VISUALIZE : [
+                    VISOBJECT({
+                        REPRESENTS : "Pressure",
+                        GEOMETRY : shapes.point,
+                        POSITION : ["x", "y"],
+                        minval : 0,
+                        maxval : 10,
+                    })
+                ],
                 REQUIRE : ["Pressure"],    
                 PROCESSES : [
                     (async function (S){with (S){
@@ -197,19 +262,16 @@ describe('Beehive functions', function() {
                 }
                 return Pressurearray;
             }
-             
             // let Schained = CHAIN(control_vol, N);
             // SIMPLECONNECT (Sparent) (STACK(Schained, N, { Pressure : PressureGen(Nshelf) }));
-
+            SIMPLECONNECT (Sparent) (MESH(control_vol, N, N))
 
             simulation_to_run = {
-                main : () => {
-                    SIMPLECONNECT (Sparent) (MESH(control_vol, N, N))
-                },
-                Sparent : Sparent
+                main : ()=>{},
+                Sparent :Sparent
             }
-
             await RUNSIMULATION(simulation_to_run);
+            
             assert(1 === 1, true);
 
         });
@@ -217,7 +279,7 @@ describe('Beehive functions', function() {
 
     describe('search', function() {
         it('checks search by', async function() {
-
+            reset()
             let Sparent = SYSTEM();
 
             let S1= SYSTEM ({
@@ -256,7 +318,7 @@ describe('Beehive functions', function() {
 
     describe('pattern', function() {
         it('checks pattern formation', async function() {
-
+            reset()
             let Sparent = SYSTEM();
 
             let S1= SYSTEM ({
@@ -286,7 +348,7 @@ describe('Beehive functions', function() {
 
     describe('second order diff eqn', function() {
         it('checks second order diff eqn', async function() {
-
+            reset()
             let Sparent = SYSTEM();
 
             let S1= SYSTEM ({

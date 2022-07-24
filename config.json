@@ -3,9 +3,8 @@
     "DEBUGPROCESSES" : false,
     "DEBUGSYSTEMS" : false,
     "DEBUGPARAMS" : false,
-    "DEBUGVISOBEJCT" : true,
+    "DEBUGVISOBEJCT" : false,
     "simulation" : "livebeehive.js",
-    "ADDTRACER" : true,
-    "LOGGING" : true,
-    "ADD_TRACER": true
+    "LOGGING" : false,
+    "ADD_TRACER": false
 }

@@ -1,79 +1,98 @@
-const { PATTERN } = require('../lib/beehive.js');
-const {shapes, calc, SYSTEM, SIMPLECONNECT, CONNECT, CHAIN, STACK, MESH, RUNSIMULATION, COPY, bfsTraverse }  = require('../dev.js');
+const { run_system, hierarchical } = require('../lib/beehive.js');
+const { DISABLEFLOW, ENABLEFLOW, DISABLEPROCESS } = require('../lib/beehiveUtils.js');
+const {sys_by_id} = require('../lib/core/globalParameters.js')
+
+const {condition, shapes, calc, SYSTEM, VISOBJECT, SIMPLECONNECT, CHAIN, STACK, MESH, RUNSIMULATION, COPY, bfsTraversem, DOWHERE }  = require('./../dev.js');
+var process = require('process');
+const { without } = require('lodash');
 
 shapes._reset();
 
-let Sparent = SYSTEM();
+let coordinates = (async function (S){with (S){
+    x = x + dx;
+    y = y + dy;
+    X = 2 * x;
+    Y = 2 * y;
+}})
 
-let S1 = SYSTEM ({
-    NAME : "S1",
-    Pressure : 200,
-    REQUIRE : ["Pressure"],    
-    PROCESSES : [
-        (async function (S){with (S){
-            Pressure = 0.95 * Pressure
-        }})
-    ],
-});
-
-let S2 = SYSTEM ({
-    NAME : "S2",
-    Pressure : 200,
-    REQUIRE : ["Pressure"],    
-    PROCESSES : [
-        (async function (S){with (S){
-            Pressure = 0.95 * Pressure
-        }})
-    ],
-});
-
-let S3 = SYSTEM ({
-    NAME : "S3",
+let control_vol = SYSTEM ({
+    NAME : "control_vol",
     VISUALIZE : [
-        {
-            REPRESENTS : "Qty",
-            GEOMETRY : shapes.line,
-            maxval : 400
-        }
+
+        VISOBJECT({
+            REPRESENTS : "U",
+            POSITION : ["x", "y"],
+        }),
+
+        VISOBJECT({
+            REPRESENTS : condition("U >= 120 &&  U <=130"),
+            POSITION : ["x", "y"],
+        }),
     ],
-    Pressure : 0,
-    Qty : 0,
-    delta : 0.1,
-    omega :2,
-    delPressure : 0,
-    REQUIRE : ["Pressure", "delPressure"],    
+    U : 200,
+    X : 0,
+    Y : 0,
+    x : 0,
+    y: 0,
+    dx : 1,
+    dy : 1,
+    del : 0.1,
+    dUx : 1,
+    dUy : 1,
+    dUxy : 0,
+    d2Ux : 0,
+    d2Uy : 0,
+    REQUIRE : ["U", "dUx", "dUy", "dUxy", "d2Ux", "d2Uy", "x", "y",],
+    accumulables : ["U"],
     PROCESSES : [
         (async function (S){with (S){
-            Pressure = Pressure + delta * delPressure
-            delPressure = delPressure + delta * omega * (-Pressure)
-            Qty = 200  + Pressure
-        }})
+            dUx = dUx + x*(del * d2Ux + del * dUxy)
+            dUy = dUy + y*(del * dUxy + del * d2Uy)
+            U = U + del * dUx + del * dUy
+            d2Ux = - d2Uy
+            d2Uy = - del * del * U
+        }}),
+        // (async function (S){with (S){
+        //     x = x + dx;
+        //     y = y + dy;
+        //     X = 2 * x;
+        //     Y = 2 * y;
+        // }}),
+        coordinates,
     ],
 });
 
-let main = () => {
-    //-----Example 1-----------
-    let N = 200;
+let Sparent = SYSTEM({NAME:"Parent"});
 
+let main = async () => {
+    let N = 3;
+    let M = 3;
+    let mesh = (MESH(control_vol, N, M, 
+                                xflow = ["x", "dUy", "d2Uy", "dUx", "d2Ux", "dUxy", "U",], 
+                                yflow = ["y", "dUy", "d2Uy", "dUx", "d2Ux", "dUxy", "U",]));
 
-    /***
-     *   
-     *   
-     * S1 ---- S2----- S3
-     *   \             /
-     *    -------------
-     * 
-     * 
-     */
+    SIMPLECONNECT (Sparent) (mesh)
 
-    SIMPLECONNECT (S1) (S2, S3)
-    SIMPLECONNECT (S2) (S3)
-    SIMPLECONNECT (Sparent) (PATTERN(S1, {'S2' : 'S3', "S1" : "S2"}, N))
-    
+    await run_system(Sparent.ID, hierarchical)
+
+    Object.keys(sys_by_id).forEach(element => {
+        console.log(element, sys_by_id[element].x)
+    });
+    console.log('\n')
+
+    DISABLEFLOW(Sparent, ["x", "y"], ["parent.x < child.x"]);
+    DISABLEPROCESS(Sparent, [coordinates]);
+
+    await run_system(Sparent.ID, hierarchical)
+
+    Object.keys(sys_by_id).forEach(element => {
+        console.log(element, sys_by_id[element].x)
+    });
+    console.log("\n");
 }
-
 
 module.exports = {
     Sparent,
     main,
 }
+main()

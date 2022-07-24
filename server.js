@@ -5,6 +5,7 @@ const util = require("util");
 const exec = require('child_process').exec;
 const {reset, createlog} = require('./dev.js')
 const {loggerCreator} = require('./loggerConfig.js')
+var process = require('process')
 
 /**
  * Uncomment this for test mode
@@ -157,6 +158,9 @@ const accept_simulation_request = async data => {
 
 wss.on("connection" , async ws => {
     initiate_simulation(ws);
+
+    let memoryUse = process.memoryUsage();
+    console.log("memoryUsage", memoryUse.heapUsed/memoryUse.heapTotal, memoryUse)
     ws.onmessage =(async blobdata => {
         const data = JSON.parse(blobdata.data);
         const message = "received data from client as " + JSON.stringify(data)

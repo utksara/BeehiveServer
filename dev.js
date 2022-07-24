@@ -2,6 +2,7 @@ module.exports.calc =require('./lib/calc.js');
 const {SYSTEM, RUNSIMULATION, SIMPLECONNECT, BICONNECT, CHAIN, STACK, MESH, CONNECT, COPY, PATTERN, PROCESS, CONNECTIONS} = require('./lib/beehive.js');
 const {bfsTraverse, VISOBJECT, createlog} = require('./lib/beehiveUtils.js')
 const beehiveUtils = require('./lib/beehiveUtils.js')
+const globalParameters = require('./lib/core/globalParameters.js')
 const {condition} = require('./lib/visualizationUtils.js')
 
 module.exports.SYSTEM = SYSTEM;
@@ -21,15 +22,16 @@ module.exports.CONNECTIONS = CONNECTIONS;
 module.exports.createlog = createlog;
 module.exports.condition = condition;
 module.exports.shapes = require('./lib/shapes.js');
+module.exports.DOWHERE = beehiveUtils.DOWHERE;
 
 const {_reset} = require('./lib/shapes.js');
 ;
 module.exports.reset = ()=>{
     _reset();
-    beehiveUtils.list_of_objs = [];
-    beehiveUtils.vis_objs = [];
-    beehiveUtils.sys_by_id = {};
-    beehiveUtils.edge_by_id = {};
-    beehiveUtils.execution_order = [];
-    beehiveUtils.global_id = 0;
+    globalParameters.list_of_objs = [];
+    globalParameters.vis_objs = [];
+    globalParameters.sys_by_id = {};
+    globalParameters.edge_by_id = {};
+    globalParameters.execution_order = [];
+    globalParameters.global_id = 0;
 }
