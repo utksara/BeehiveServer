@@ -65,8 +65,8 @@ let control_vol = SYSTEM ({
 let Sparent = SYSTEM({NAME:"Parent"});
 
 let main = async () => {
-    let N = 40;
-    let M = 40;
+    let N = 4;
+    let M = 4;
     let mesh = (MESH(control_vol, N, M, 
                                 xflow = ["x", "dUy", "d2Uy", "dUx", "d2Ux", "dUxy", "U",], 
                                 yflow = ["y", "dUy", "d2Uy", "dUx", "d2Ux", "dUxy", "U",]));
