@@ -52,12 +52,6 @@ let control_vol = SYSTEM ({
             d2Ux = - d2Uy
             d2Uy = - del * del * U
         }}),
-        // (async function (S){with (S){
-        //     x = x + dx;
-        //     y = y + dy;
-        //     X = 2 * x;
-        //     Y = 2 * y;
-        // }}),
         coordinates,
     ],
 });
@@ -65,15 +59,15 @@ let control_vol = SYSTEM ({
 let Sparent = SYSTEM({NAME:"Parent"});
 
 let main = async () => {
-    let N = 4;
-    let M = 4;
+    let N = 100;
+    let M = 40;
     let mesh = (MESH(control_vol, N, M, 
                                 xflow = ["x", "dUy", "d2Uy", "dUx", "d2Ux", "dUxy", "U",], 
                                 yflow = ["y", "dUy", "d2Uy", "dUx", "d2Ux", "dUxy", "U",]));
 
     SIMPLECONNECT (Sparent) (mesh)
 
-    // await run_system(Sparent.ID, hierarchical)
+    await run_system(Sparent.ID, hierarchical)
 
     // Object.keys(sys_by_id).forEach(element => {
     //     console.log(element, sys_by_id[element].x)
