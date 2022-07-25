@@ -1,4 +1,4 @@
-const { run_system, hierarchical } = require('../lib/beehive.js');
+const { run_system, hierarchical, RUN } = require('../lib/beehive.js');
 const { DISABLEFLOW, ENABLEFLOW, DISABLEPROCESS } = require('../lib/beehiveUtils.js');
 const {sys_by_id} = require('../lib/core/globalParameters.js')
 
@@ -11,8 +11,6 @@ shapes._reset();
 let coordinates = (async function (S){with (S){
     x = x + dx;
     y = y + dy;
-    X = 2 * x;
-    Y = 2 * y;
 }})
 
 let control_vol = SYSTEM ({
@@ -30,10 +28,8 @@ let control_vol = SYSTEM ({
         }),
     ],
     U : 200,
-    X : 0,
-    Y : 0,
-    x : 0,
-    y: 0,
+    x : 100,
+    y: 100,
     dx : 1,
     dy : 1,
     del : 0.1,
@@ -42,6 +38,7 @@ let control_vol = SYSTEM ({
     dUxy : 0,
     d2Ux : 0,
     d2Uy : 0,
+    view_scale :2,
     REQUIRE : ["U", "dUx", "dUy", "dUxy", "d2Ux", "d2Uy", "x", "y",],
     accumulables : ["U"],
     PROCESSES : [
@@ -59,7 +56,7 @@ let control_vol = SYSTEM ({
 let Sparent = SYSTEM({NAME:"Parent"});
 
 let main = async () => {
-    let N = 100;
+    let N = 40;
     let M = 40;
     let mesh = (MESH(control_vol, N, M, 
                                 xflow = ["x", "dUy", "d2Uy", "dUx", "d2Ux", "dUxy", "U",], 
@@ -67,22 +64,21 @@ let main = async () => {
 
     SIMPLECONNECT (Sparent) (mesh)
 
-    await run_system(Sparent.ID, hierarchical)
+    await RUN(Sparent.ID)
 
-    // Object.keys(sys_by_id).forEach(element => {
-    //     console.log(element, sys_by_id[element].x)
-    // });
-    // console.log('\n')
+    DISABLEFLOW(Sparent, ["x", "y"], ["parent.x < child.x"]);
+    DISABLEPROCESS(Sparent, [coordinates]);
 
-    // DISABLEFLOW(Sparent, ["x", "y"], ["parent.x < child.x"]);
-    // DISABLEPROCESS(Sparent, [coordinates]);
+    // await RUN(Sparent.ID)
+    // await RUN(Sparent.ID)
+    // await RUN(Sparent.ID)
+    // await RUN(Sparent.ID)
 
-    // await run_system(Sparent.ID, hierarchical)
 
-    // Object.keys(sys_by_id).forEach(element => {
-    //     console.log(element, sys_by_id[element].x)
-    // });
-    // console.log("\n");
+    Object.keys(sys_by_id).forEach(element => {
+        console.log(element, sys_by_id[element].U)
+    });
+    console.log('\n')
 }
 
 module.exports = {
