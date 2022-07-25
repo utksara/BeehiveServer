@@ -65,34 +65,34 @@ let control_vol = SYSTEM ({
 let Sparent = SYSTEM({NAME:"Parent"});
 
 let main = async () => {
-    let N = 3;
-    let M = 3;
+    let N = 4;
+    let M = 4;
     let mesh = (MESH(control_vol, N, M, 
                                 xflow = ["x", "dUy", "d2Uy", "dUx", "d2Ux", "dUxy", "U",], 
                                 yflow = ["y", "dUy", "d2Uy", "dUx", "d2Ux", "dUxy", "U",]));
 
     SIMPLECONNECT (Sparent) (mesh)
 
-    await run_system(Sparent.ID, hierarchical)
+    // await run_system(Sparent.ID, hierarchical)
 
-    Object.keys(sys_by_id).forEach(element => {
-        console.log(element, sys_by_id[element].x)
-    });
-    console.log('\n')
+    // Object.keys(sys_by_id).forEach(element => {
+    //     console.log(element, sys_by_id[element].x)
+    // });
+    // console.log('\n')
 
-    DISABLEFLOW(Sparent, ["x", "y"], ["parent.x < child.x"]);
-    DISABLEPROCESS(Sparent, [coordinates]);
+    // DISABLEFLOW(Sparent, ["x", "y"], ["parent.x < child.x"]);
+    // DISABLEPROCESS(Sparent, [coordinates]);
 
-    await run_system(Sparent.ID, hierarchical)
+    // await run_system(Sparent.ID, hierarchical)
 
-    Object.keys(sys_by_id).forEach(element => {
-        console.log(element, sys_by_id[element].x)
-    });
-    console.log("\n");
+    // Object.keys(sys_by_id).forEach(element => {
+    //     console.log(element, sys_by_id[element].x)
+    // });
+    // console.log("\n");
 }
 
 module.exports = {
     Sparent,
     main,
 }
-main()
+// main()
